@@ -1,5 +1,7 @@
+import {preRequisites} from "./PreRequisitesModel";
+
 export interface CourseModel {
-    courseName: string,
-    description: string,
-    pre_reqs: Array<CourseModel>
+    department : string,
+    courseNumber: number,
+    preReqs: preRequisites
 }
