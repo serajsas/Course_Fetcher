@@ -1,6 +1,4 @@
-FROM node:16.13.2
-
-ENV NODE_ENV=production
+FROM node:alpine
 
 WORKDIR /app
 
@@ -10,7 +8,8 @@ RUN npm install --production
 
 COPY . .
 
-EXPOSE 8080
+RUN npm install
 
+EXPOSE ${SERVER_PORT}
 
-CMD [ "npm", "run" , "start"]
+CMD [ "npm", "start"]

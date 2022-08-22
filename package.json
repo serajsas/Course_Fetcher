@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "docker:build": "docker build -t course_fetcher .",
+    "docker:run": "docker-compose up",
+    "docker:stop": "docker-compose down",
     "docker:clean-image": "docker rmi $(docker images --filter \"dangling=true\" -q --no-trunc)",
-    "docker:start": "docker run --publish 8080:8080 course_fetcher",
     "start": "npx ts-node src/Server.ts",
     "debug": "nodemon src/Server.ts",
     "test": "mocha --require ts-node/register --timeout 10000 test/**/*.spec.ts"
