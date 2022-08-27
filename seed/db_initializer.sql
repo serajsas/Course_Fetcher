@@ -19,3 +19,4 @@ Create table Prereq
     foreign key (course_dept_name, course_number) references Course (dept_name, course_no),
     foreign key (prereq_dept_name, prereq_course_number) references Course (dept_name, course_no)
 );
+
