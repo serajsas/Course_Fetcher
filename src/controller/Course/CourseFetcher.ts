@@ -1,9 +1,10 @@
-import {ICourseFetch} from "./ICourseFetch";
-import {CourseModel} from "../models/Course/CourseModel";
-import {PreRequisitesModel} from "../models/Course/PreRequisitesModel";
+import {ICourseFetch} from "../../api/ICourseFetch";
+import {CourseModel} from "../../models/Course/CourseModel";
+import {PreRequisitesModel} from "../../models/Course/PreRequisitesModel";
 
-export class CourseFetch implements ICourseFetch {
+export class CourseFetcher implements ICourseFetch {
     doesHavePrereqs(courses: Array<CourseModel>): Promise<boolean> {
+
         return Promise.resolve(false);
     }
 
@@ -11,4 +12,5 @@ export class CourseFetch implements ICourseFetch {
         // @ts-ignore
         return Promise.resolve(undefined);
     }
+
 }
