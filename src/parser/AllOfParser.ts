@@ -38,9 +38,3 @@ const getFirstCourseIfExists = function (preReqs: string): string {
     }
     return "";
 }
-
-
-// getFirstCourseIfExists("BIOL 200 and one of APBI 312, APBI 351, BIOL 260, BIOL 351, BIOL 352, BIOL 361, FRST 311.")
-// console.log(
-//     allOfParser("Pre-reqs: One of CHEM 211, CHEM 215 and all of CHEM 208, CHEM 213, CHEM 245.\n")
-// )
