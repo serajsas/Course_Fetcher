@@ -41,7 +41,7 @@ export class CourseDAO {
         });
         try {
             await course.save(() => {
-                logger.info(NAMESPACE, "Course saved!", course);
+                logger.info(NAMESPACE, "Course saved!");
             });
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);

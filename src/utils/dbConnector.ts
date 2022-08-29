@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import config from "./config";
 import logger from "./logger";
 
 const NAMESPACE = 'src/utils/dbConnector.ts';
-const url = `mongodb+srv://${config.mongoose.user}:${config.mongoose.pass}@cluster0.sndj1.mongodb.net/Course`;
+const url = `mongodb://mongodb_container:27017`;
 
 export function connect(): void {
     mongoose.connect(
@@ -13,4 +12,4 @@ export function connect(): void {
     }).catch(err => {
         console.log(err)
     })
-};
+}
