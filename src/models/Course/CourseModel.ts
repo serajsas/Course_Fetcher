@@ -1,12 +1,15 @@
 import {PreRequisitesModel} from "./PreRequisitesModel";
 
-export interface CourseModel {
-    department: string,
+export interface ICourse {
+    courseDepartment: string,
     courseNumber: number,
-    preReqs: PreRequisitesModel
+    preRequisites: string
+};
+
+
+export interface CourseModel {
+    courseDepartment: string,
+    courseNumber: number,
+    preRequisites?: PreRequisitesModel
 }
 
-export interface Course {
-    department: string,
-    courseNumber: number
-}
