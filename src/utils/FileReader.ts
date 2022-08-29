@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import logger from "./logger";
 
 export class ErrorReadingFile extends Error {
     constructor(msg?: string) {
@@ -10,9 +11,9 @@ export class ErrorReadingFile extends Error {
 export async function readLocalTestFile(filePath: string): Promise<Array<string>> {
     let preReqs: Array<string>;
     try {
-        let data = await fs.readFile(path.join(__dirname, "../test_files/", filePath), 'utf8');
+        let data = await fs.readFile(path.join(__dirname, "../../", filePath), 'utf8');
         preReqs = data.split("\n");
-    } catch (e) {
+    } catch (e: any) {
         throw new ErrorReadingFile("Error reading file!");
     }
     return preReqs;

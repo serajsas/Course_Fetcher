@@ -1,15 +1,15 @@
-import {Course} from "../models/Course/CourseModel";
 import {isCourse} from "./Parser";
+import {CourseModel} from "../models/Course/CourseModel";
 
-export function allOfParser(preReqs: string): Array<Course> {
-    let parsedResult: Array<Course> = [];
+export function allOfParser(preReqs: string): Array<CourseModel> {
+    let parsedResult: Array<CourseModel> = [];
     let onlyOneCourse: Array<string> =
         preReqs.split(new RegExp(":"));
     let course = getFirstCourseIfExists(onlyOneCourse[1].trim());
     if (course.length != 0) {
         let courseValues = course.split(" ");
-        let parsedCourse: Course = {
-            department: courseValues[0],
+        let parsedCourse: CourseModel = {
+            courseDepartment: courseValues[0],
             courseNumber: parseInt(courseValues[1])
         }
         parsedResult.push(parsedCourse);
@@ -22,8 +22,8 @@ export function allOfParser(preReqs: string): Array<Course> {
     });
     courses.forEach(course => {
         let values = course.split(" ");
-        let parsedCourse: Course = {
-            department: values[0],
+        let parsedCourse: CourseModel = {
+            courseDepartment: values[0],
             courseNumber: parseInt(values[1])
         }
         parsedResult.push(parsedCourse);
