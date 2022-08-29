@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "rel" , "rel/feature/**"]
+    branches: [ "rel" , "feature/**"]
 
 
 jobs:
