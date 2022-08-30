@@ -19,3 +19,11 @@ export function isCourse(course: string): boolean {
     }
     return false;
 }
+
+export function isOneOf(preReqs:string):boolean {
+    return true;
+};
+
+export function isAllOf(preReqs:string):boolean {
+    return true;
+}

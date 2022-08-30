@@ -1,7 +1,9 @@
-import {isCourse} from "./Parser";
+import {isAllOf, isCourse} from "./Parser";
 import {CourseModel} from "../models/Course/CourseModel";
 
 export function allOfParser(preReqs: string): Array<CourseModel> {
+    if (!isAllOf(preReqs))
+        return [];
     let parsedResult: Array<CourseModel> = [];
     let onlyOneCourse: Array<string> =
         preReqs.split(new RegExp(":"));

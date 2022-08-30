@@ -3,8 +3,9 @@ import path from "path";
 import logger from "./logger";
 
 export class ErrorReadingFile extends Error {
-    constructor(msg?: string) {
-        super(msg);
+    constructor(message?: string) {
+        super(message);
+        Error.captureStackTrace(this, ErrorReadingFile);
     }
 }
 
