@@ -28,7 +28,7 @@ export function formatString(major: string) {
 }
 
 export function isTwoStringsContainTheSameWordsSeperatedWithAnd(pageMajor: string, major: string, specialization: string): boolean {
-    if (pageMajor == undefined || !pageMajor.includes(specialization))
+    if (pageMajor == undefined || !pageMajor.includes(major) || !pageMajor.includes(specialization))
         return false;
     pageMajor = extractMajorNameOnly(pageMajor);
     let a_copy = pageMajor.split(" ");

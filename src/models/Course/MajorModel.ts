@@ -7,7 +7,7 @@ export class MajorDoesNotExist extends Error {
 
 export interface MajorModel {
     majorTitle: string,
-    requirements: Array<string>
+    requirements: Array<Requirement>
 }
 
 export interface Requirement {
@@ -31,7 +31,7 @@ function createMajorModel(majorResult: Array<string>): MajorModel {
     return majorModel;
 }
 
-function createYearCourses(majorResult: Array<string>): Array<string> {
+function createYearCourses(majorResult: Array<string>): Array<Requirement> {
     let stack: string[] = [];
     for (let i = 0; i < majorResult.length; i++) {
         if (majorResult[i] == "Total Credits") {
@@ -40,16 +40,17 @@ function createYearCourses(majorResult: Array<string>): Array<string> {
         }
         stack.push(majorResult[i]);
     }
-    stack = processStack(stack);
-    return stack;
+    return processStack(stack);
+    ;
 }
 
-function processStack(stack: string[]): string[] {
-    let result: string[] = [];
+function processStack(stack: string[]): Requirement[] {
+    let result: Requirement[] = [];
     while (stack.length > 0) {
-        let credits: any = stack.pop() + " credits.";
-        let requirement: any = stack.pop() + " " + credits;
-        result.push(requirement);
+        let credits: any = stack.pop();
+        let requirement: any = stack.pop();
+        let req: Requirement = {name: requirement, credits: credits};
+        result.push(req);
     }
     result = result.reverse();
     return result;

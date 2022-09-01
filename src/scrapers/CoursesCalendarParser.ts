@@ -1,8 +1,9 @@
 import * as cheerio from 'cheerio';
 import {CheerioAPI} from 'cheerio';
 import axios from "axios";
-import {createMajorModels, MajorDoesNotExist, MajorModel} from "../models/Course/MajorModel";
+import {createMajorModels, MajorDoesNotExist, MajorModel, Requirement} from "../models/Course/MajorModel";
 import {formatString, isTwoStringsContainTheSameWordsSeperatedWithAnd,} from "./StringUtils";
+import {data} from "cheerio/lib/api/attributes";
 
 export async function getMajorCalendar(major: string, specialization = "Major"): Promise<Array<MajorModel>> {
     let majorLink: string = await getMajorTree(major);
@@ -13,13 +14,11 @@ export async function getMajorCalendar(major: string, specialization = "Major"):
     page('sup').remove();
     page('.footnote').remove();
 
-    let majorString = formatString(major);
-    let specializationString = formatString(specialization);
     let {scrapedData, requiredNames} = fetchRequirementsFromPage(page);
     let majorModels = prepareMajorModels(scrapedData,
         requiredNames,
-        majorString,
-        specializationString);
+        major,
+        specialization);
     return majorModels;
 }
 
@@ -51,11 +50,17 @@ function prepareMajorModels(result: any, names: any, major: string, specializati
         majorModels[i].majorTitle = names[i];
     }
     majorModels = majorModels.filter(s => {
-        return isTwoStringsContainTheSameWordsSeperatedWithAnd(s.majorTitle, major, specialization);
+        return isTwoStringsContainTheSameWordsSeperatedWithAnd(s.majorTitle,
+            major,
+            specialization);
     })
     majorModels = majorModels.map((s) => {
         if (s.requirements.length == 0) {
-            s.requirements.push("Requirements might exist on the other major's page, try to invert your majors")
+            let req: Requirement = {
+                name: "Requirements might exist on the other major's page, try to invert your majors",
+                credits: "0"
+            };
+            s.requirements.push(req);
         }
         return s;
     })
@@ -74,3 +79,7 @@ async function getMajorTree(major: string): Promise<string> {
     }
     return "https://www.calendar.ubc.ca/vancouver/" + tree;
 }
+
+getMajorCalendar("Mathematics and Economics", "Combined Major").then(data => {
+    console.log(JSON.stringify(data, null, '  '));
+})
