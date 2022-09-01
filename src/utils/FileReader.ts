@@ -1,6 +1,5 @@
 import fs from "fs/promises";
 import path from "path";
-import logger from "./logger";
 
 export class ErrorReadingFile extends Error {
     constructor(message?: string) {

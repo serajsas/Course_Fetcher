@@ -2,7 +2,7 @@ import * as cheerio from 'cheerio';
 import axios from "axios";
 import {CourseDoesNotExist, ICourse} from "../models/Course/CourseModel";
 
-export async function scrape(courseDepartment: string, courseNumber: number): Promise<ICourse> {
+export async function getCourseWithPreReqs(courseDepartment: string, courseNumber: number): Promise<ICourse> {
     const response =
         await axios.get(`https://www.courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=${courseDepartment}&course=${courseNumber}`);
     const $ = cheerio.load(response.data);

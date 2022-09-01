@@ -1,5 +1,4 @@
 import {CourseModel, ICourse} from "../models/Course/CourseModel";
-import {PreRequisitesModel} from "../models/Course/PreRequisitesModel";
 
 
 export interface ICourseFetch {

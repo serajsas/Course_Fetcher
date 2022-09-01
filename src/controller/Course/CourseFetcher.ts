@@ -1,7 +1,7 @@
 import {ICourseFetch} from "../../api/ICourseFetch";
 import {CourseDAO} from "../../dao/Course/CourseDAO";
 import logger from "../../utils/logger";
-import {scrape} from "../../scrapers/scraper";
+import {getCourseWithPreReqs} from "../../scrapers/PreReqsScraper";
 import {CourseDoesNotExist, CourseModel, ICourse, PreReqsNotFoundInDB} from "../../models/Course/CourseModel";
 
 const NAMESPACE = "src/controller/Course/CourseFetcher.ts";
@@ -32,7 +32,7 @@ export class CourseFetcher implements ICourseFetch {
                 logger.debug(NAMESPACE, e.message);
                 let data: ICourse;
                 try {
-                    data = await scrape(deptName, courseNumber);
+                    data = await getCourseWithPreReqs(deptName, courseNumber);
                     await this.courseDAO.insertPreReqCourse(data.courseNumber,
                         data.courseDepartment,
                         data.preRequisites,
