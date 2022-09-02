@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 import axios from "axios";
-import {CourseDoesNotExist, ICourse} from "../models/Course/CourseModel";
+import {CourseDoesNotExist, ICourse} from "../../models/course/CourseModel";
 
 export async function getCourseWithPreReqs(courseDepartment: string, courseNumber: number): Promise<ICourse> {
     const response =

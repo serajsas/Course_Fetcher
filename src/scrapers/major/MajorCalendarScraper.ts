@@ -1,35 +1,46 @@
 import * as cheerio from 'cheerio';
 import {CheerioAPI} from 'cheerio';
 import axios from "axios";
-import {createMajorModels, MajorDoesNotExist, MajorModel, Requirement} from "../models/Course/MajorModel";
-import {formatString, isTwoStringsContainTheSameWordsSeperatedWithAnd,} from "./StringUtils";
-import {data} from "cheerio/lib/api/attributes";
+import {
+    capitalizeStrings,
+    formatStringToGetMajorPage,
+    isTwoStringsContainTheSameWordsSeperatedWithAnd,
+    removeExtraWhiteSpaces,
+} from "../../utils/StringUtils";
+import {createMajorModels, MajorDoesNotExist, MajorModel, Requirement} from "../../models/major/MajorModel";
 
-export async function getMajorCalendar(major: string, specialization = "Major"): Promise<Array<MajorModel>> {
+const majorDoesNotExistFlag = "Requirements not found! Check other pages";
+const majorNotFoundFlag = "Requirements might exist on the other major's page, try to invert your majors";
+
+export async function getMajorCalendar(major: string, specialization: string): Promise<Array<MajorModel>> {
     let majorLink: string = await getMajorTree(major);
-
     const response = await axios.get(majorLink);
     const page = cheerio.load(response.data);
-
     page('sup').remove();
     page('.footnote').remove();
-
-    let {scrapedData, requiredNames} = fetchRequirementsFromPage(page);
+    let majorCapitalized = capitalizeStrings(major.split(" ")).join(" ");
+    let specializationCapitalized = undefined;
+    if (specialization) {
+        specializationCapitalized = capitalizeStrings(specialization.split(" ")).join(" ");
+    }
+    let {scrapedData, requiredNames} = fetchRequirementsFromPage(page,
+        majorCapitalized,
+        specializationCapitalized);
     let majorModels = prepareMajorModels(scrapedData,
         requiredNames,
-        major,
-        specialization);
+        majorCapitalized, specializationCapitalized
+    );
     return majorModels;
 }
 
-function fetchRequirementsFromPage(page: CheerioAPI) {
+function fetchRequirementsFromPage(page: CheerioAPI, major: string, specialization: string | undefined) {
     let scrapedData: any = [];
-    let requiredNames: any = page(`h4:contains("Major"),h4:contains("Honours"), h4:contains("Dual Degree")`)
+    let requiredNames: any = page(`h4:contains("Major"), h4:contains("Honours"), h4:contains("Dual Degree"), h4:contains(${major}), h4:contains(${specialization})`)
         .toArray().map(e => {
             if (page(e).next().next(`p`).text().trim().includes("See ")) {
-                return "Requirements not found! Check other pages";
+                return majorDoesNotExistFlag;
             }
-            return page(e).text().trim();
+            return removeExtraWhiteSpaces(page(e).text().trim());
         })
     page(`table`).each((function (e, i) {
         const row: any = [];
@@ -41,10 +52,10 @@ function fetchRequirementsFromPage(page: CheerioAPI) {
     return {scrapedData, requiredNames};
 }
 
-function prepareMajorModels(result: any, names: any, major: string, specialization: string): Array<MajorModel> {
+function prepareMajorModels(result: any, names: any, major: string, specialization: string | undefined): Array<MajorModel> {
     let majorModels: Array<MajorModel> = createMajorModels(result);
     names = names.filter((s: string) => {
-        return s != "Requirements not found! Check other pages";
+        return s != majorDoesNotExistFlag;
     })
     for (let i = 0; i < majorModels.length; i++) {
         majorModels[i].majorTitle = names[i];
@@ -57,7 +68,7 @@ function prepareMajorModels(result: any, names: any, major: string, specializati
     majorModels = majorModels.map((s) => {
         if (s.requirements.length == 0) {
             let req: Requirement = {
-                name: "Requirements might exist on the other major's page, try to invert your majors",
+                name: majorNotFoundFlag,
                 credits: "0"
             };
             s.requirements.push(req);
@@ -72,14 +83,13 @@ async function getMajorTree(major: string): Promise<string> {
     const response =
         await axios.get(`https://www.calendar.ubc.ca/vancouver/${uriComponent}`);
     const $ = cheerio.load(response.data);
-    let majorString = formatString(major);
+    let majorString = formatStringToGetMajorPage(major);
     let tree: string | undefined = $(`a:contains(${majorString.split("and")[0]})`).attr("href");
+    if (majorString == "Neuroscience") {
+        tree = "index.cfm?tree=12,215,410,1701";
+    }
     if (tree == undefined) {
         throw new MajorDoesNotExist();
     }
     return "https://www.calendar.ubc.ca/vancouver/" + tree;
 }
-
-getMajorCalendar("Mathematics and Economics", "Combined Major").then(data => {
-    console.log(JSON.stringify(data, null, '  '));
-})

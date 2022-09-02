@@ -1,8 +1,8 @@
-import {ICourseFetch} from "../../api/ICourseFetch";
-import {CourseDAO} from "../../dao/Course/CourseDAO";
+import {ICourseFetch} from "../../api/courseAPI/ICourseFetch";
+import {CourseDAO} from "../../dao/course/CourseDAO";
 import logger from "../../utils/logger";
-import {getCourseWithPreReqs} from "../../scrapers/PreReqsScraper";
-import {CourseDoesNotExist, CourseModel, ICourse, PreReqsNotFoundInDB} from "../../models/Course/CourseModel";
+import {getCourseWithPreReqs} from "../../scrapers/course/CoursePreReqsScraper";
+import {CourseDoesNotExist, ICourse, PreReqsNotFoundInDB} from "../../models/course/CourseModel";
 
 const NAMESPACE = "src/controller/Course/CourseFetcher.ts";
 
@@ -11,10 +11,6 @@ export class CourseFetcher implements ICourseFetch {
 
     constructor() {
         this.courseDAO = new CourseDAO();
-    }
-
-    doesHavePreReqs(courses: Array<CourseModel>): Promise<boolean> {
-        return Promise.resolve(false);
     }
 
     async getCoursePreReqs(deptName: string, courseNumber: number): Promise<ICourse> {

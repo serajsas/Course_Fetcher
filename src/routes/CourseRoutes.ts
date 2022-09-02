@@ -1,8 +1,8 @@
 import express from "express";
 import logger from "../utils/logger";
-import {ICourseFetch} from "../api/ICourseFetch";
-import {CourseFetch} from "../api/CourseFetch";
-import {ICourse} from "../models/Course/CourseModel";
+import {ICourseFetch} from "../api/courseAPI/ICourseFetch";
+import {CourseFetch} from "../api/courseAPI/CourseFetch";
+import {ICourse} from "../models/course/CourseModel";
 
 const router = express.Router();
 
@@ -14,6 +14,9 @@ router.get('/prerequisites/', async (req, res) => {
     const departmentName: any = req.query.dept;
     const courseNumber: any = req.query.number;
     logger.info(NAMESPACE, "Responding to get request");
+    if (departmentName == undefined || courseNumber == undefined) {
+        return res.status(404).send();
+    }
     let preReqs: ICourse;
     try {
         preReqs = await courseAPI.getCoursePreReqs(departmentName, courseNumber);

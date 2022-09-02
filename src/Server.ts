@@ -4,6 +4,7 @@ import logger from "./utils/logger";
 import config from "./utils/config";
 import CourseRoutes from './routes/CourseRoutes';
 import {connect} from "./utils/dbConnector";
+import MajorRoutes from './routes/MajorRoutes';
 
 const NAMESPACE = "src/Server.ts";
 
@@ -13,6 +14,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use('/', CourseRoutes);
+app.use('/', MajorRoutes);
 
 app.get("*", (req, res) => {
     logger.info(NAMESPACE, "Server received a request")

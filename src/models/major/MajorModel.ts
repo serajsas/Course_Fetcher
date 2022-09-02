@@ -41,7 +41,6 @@ function createYearCourses(majorResult: Array<string>): Array<Requirement> {
         stack.push(majorResult[i]);
     }
     return processStack(stack);
-    ;
 }
 
 function processStack(stack: string[]): Requirement[] {

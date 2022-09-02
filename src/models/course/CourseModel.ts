@@ -1,5 +1,3 @@
-import {PreRequisitesModel} from "./PreRequisitesModel";
-
 export class PreReqsNotFoundInDB extends Error {
     constructor() {
         super("PreReqsNotFoundInDB");
@@ -21,13 +19,3 @@ export interface ICourse {
     courseNumber: number,
     preRequisites: string
 }
-
-export interface CourseModel {
-    courseTitle: string
-    courseDescription: string,
-    courseDepartment: string,
-    courseNumber: number,
-    preRequisites?: PreRequisitesModel
-}
-
-

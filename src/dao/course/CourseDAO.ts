@@ -1,8 +1,8 @@
 import mongoose, {model} from "mongoose";
-import {ICourse, PreReqsNotFoundInDB} from "../../models/Course/CourseModel";
+import {ICourse, PreReqsNotFoundInDB} from "../../models/course/CourseModel";
 import logger from "../../utils/logger";
 
-const NAMESPACE = "src/dao/Course/CourseDAO.ts";
+const NAMESPACE = "src/dao/course/CourseDAO.ts";
 
 const CourseSchema = new mongoose.Schema(
     {
@@ -106,7 +106,6 @@ export class CourseDAO {
             preRequisites: result[0].preRequisites
 
         }
-        console.log(courseResult as ICourse);
         return Promise.resolve(courseResult);
     }
 }

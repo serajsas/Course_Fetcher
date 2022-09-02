@@ -1,7 +1,10 @@
 export function capitalizeStrings(arr: Array<string>): Array<string> {
     let words: Array<string> = [];
     for (let i = 0; i < arr.length; i++) {
-        if (arr[i] == 'and') {
+        if (!arr[i]) {
+            continue;
+        }
+        if (arr[i].includes('and')) {
             words.push('and');
             continue;
         }
@@ -10,7 +13,12 @@ export function capitalizeStrings(arr: Array<string>): Array<string> {
     return words;
 }
 
-export function formatString(major: string) {
+export function formatStringToGetMajorPage(major: string) {
+    if (major == "Cellular and Physiological Sciences" ||
+        major == "Earth and Ocean Sciences" ||
+        major == "Microbiology and Immunology") {
+        return major;
+    }
     let majors: Array<string> = major.split(" ").map(x => x.trim());
     majors = capitalizeStrings(majors);
     major = majors.join(" ")
@@ -27,17 +35,34 @@ export function formatString(major: string) {
     }
 }
 
-export function isTwoStringsContainTheSameWordsSeperatedWithAnd(pageMajor: string, major: string, specialization: string): boolean {
-    if (pageMajor == undefined || !pageMajor.includes(major) || !pageMajor.includes(specialization))
-        return false;
-    pageMajor = extractMajorNameOnly(pageMajor);
+export function removeExtraWhiteSpaces(s: string) {
+    let arr: Array<string> = s.split(" ");
+    arr = arr.map(s => s.trim());
+    return arr.join(" ");
+}
+
+function isAnagram(pageMajor: string, major: string | undefined) {
+    if (major == undefined)
+        return {};
     let a_copy = pageMajor.split(" ");
     a_copy = a_copy.map(s => s.trim().toLowerCase())
     a_copy.sort();
     let b_copy = major.split(" ");
     b_copy = b_copy.map(s => s.trim().toLowerCase())
     b_copy.sort();
-    return equals(a_copy, b_copy);
+    return {a_copy, b_copy};
+}
+
+export function isTwoStringsContainTheSameWordsSeperatedWithAnd(pageMajor: string, major: string, specialization: string | undefined): boolean {
+    if (pageMajor == undefined)
+        return false;
+    pageMajor = extractMajorNameOnly(pageMajor);
+    let majorCopy = isAnagram(pageMajor, major);
+    let specializationCopy = isAnagram(pageMajor, specialization);
+    if (specialization) {
+        return equals(specializationCopy.a_copy, specializationCopy.b_copy);
+    }
+    return equals(majorCopy.a_copy, majorCopy.b_copy);
 }
 
 function extractMajorNameOnly(major: string): string {
