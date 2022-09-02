@@ -10,17 +10,20 @@ const NAMESPACE = "src/routes/CourseRoutes.ts";
 
 const courseAPI: ICourseFetch = new CourseFetch();
 
-router.get('/prerequisites/', async (req, res) => {
+router.get('/', async (req, res) => {
     const departmentName: any = req.query.dept;
     const courseNumber: any = req.query.number;
     logger.info(NAMESPACE, "Responding to get request");
-    if (departmentName == undefined || courseNumber == undefined) {
+    if (!departmentName || !courseNumber) {
+        logger.error(NAMESPACE, "departmentName and courseNumber are required but found undefined!!");
         return res.status(404).send();
     }
     let preReqs: ICourse;
     try {
+        logger.info(NAMESPACE, "Fetching course preReqs");
         preReqs = await courseAPI.getCoursePreReqs(departmentName, courseNumber);
     } catch (e: any) {
+        logger.error(NAMESPACE, "No course matching is found!", {departmentName, courseNumber});
         return res.status(400).send({
             message: e.message,
         });

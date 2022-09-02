@@ -13,11 +13,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(bodyParser.json());
 
-app.use('/', CourseRoutes);
-app.use('/', MajorRoutes);
+app.use('/prerequisites', CourseRoutes);
+app.use('/major', MajorRoutes);
 
 app.get("*", (req, res) => {
     logger.info(NAMESPACE, "Server received a request")
+    return res.status(404).send();
 });
 
 connect();

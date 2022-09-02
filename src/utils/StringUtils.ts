@@ -1,4 +1,9 @@
+import logger from "./logger";
+
+const NAMESPACE = "src/utils/StringUtils.ts";
+
 export function capitalizeStrings(arr: Array<string>): Array<string> {
+    logger.info(NAMESPACE, "capitalizeStrings", arr);
     let words: Array<string> = [];
     for (let i = 0; i < arr.length; i++) {
         if (!arr[i]) {
@@ -14,14 +19,15 @@ export function capitalizeStrings(arr: Array<string>): Array<string> {
 }
 
 export function formatStringToGetMajorPage(major: string) {
+    logger.info(NAMESPACE, "formatStringToGetMajorPage", major);
+    let majors: Array<string> = major.split(" ").map(x => x.trim());
+    majors = capitalizeStrings(majors);
+    major = majors.join(" ")
     if (major == "Cellular and Physiological Sciences" ||
         major == "Earth and Ocean Sciences" ||
         major == "Microbiology and Immunology") {
         return major;
     }
-    let majors: Array<string> = major.split(" ").map(x => x.trim());
-    majors = capitalizeStrings(majors);
-    major = majors.join(" ")
     majors = major.split("and").map(x => x.trim());
     if (majors.length <= 1) {
         majors = major.split(" ").map(x => x.trim());
@@ -36,12 +42,15 @@ export function formatStringToGetMajorPage(major: string) {
 }
 
 export function removeExtraWhiteSpaces(s: string) {
+    logger.info(NAMESPACE, "removeExtraWhiteSpaces", s);
+
     let arr: Array<string> = s.split(" ");
     arr = arr.map(s => s.trim());
     return arr.join(" ");
 }
 
 function isAnagram(pageMajor: string, major: string | undefined) {
+    logger.info(NAMESPACE, "isAnagram", {pageMajor, major});
     if (major == undefined)
         return {};
     let a_copy = pageMajor.split(" ");
@@ -54,15 +63,21 @@ function isAnagram(pageMajor: string, major: string | undefined) {
 }
 
 export function isTwoStringsContainTheSameWordsSeperatedWithAnd(pageMajor: string, major: string, specialization: string | undefined): boolean {
+    logger.info(NAMESPACE, "isTwoStringsContainTheSameWordsSeperatedWithAnd", {pageMajor, major, specialization});
     if (pageMajor == undefined)
         return false;
-    pageMajor = extractMajorNameOnly(pageMajor);
-    let majorCopy = isAnagram(pageMajor, major);
-    let specializationCopy = isAnagram(pageMajor, specialization);
+    let extractedMajor = extractMajorNameOnly(pageMajor);
+    let majorCopy = isAnagram(extractedMajor, major);
+    let specializationCopy = isAnagram(extractedMajor, specialization);
+    let majorCopyResult = equals(majorCopy.a_copy, majorCopy.b_copy);
     if (specialization) {
-        return equals(specializationCopy.a_copy, specializationCopy.b_copy);
+        let result = equals(specializationCopy.a_copy, specializationCopy.b_copy) ||
+            (pageMajor.includes(specialization) && majorCopyResult);
+        logger.info(NAMESPACE, "isTwoStringsContainTheSameWordsSeperatedWithAnd", {specializationCopy, result});
+        return result;
     }
-    return equals(majorCopy.a_copy, majorCopy.b_copy);
+    logger.info(NAMESPACE, "isTwoStringsContainTheSameWordsSeperatedWithAnd", {majorCopy, majorCopyResult});
+    return majorCopyResult;
 }
 
 function extractMajorNameOnly(major: string): string {
@@ -74,6 +89,7 @@ function extractMajorNameOnly(major: string): string {
         }
         result = result + extractedMajor[i];
     }
+    logger.info(NAMESPACE, "extractMajorNameOnly", result.trim());
     return result.trim();
 }
 

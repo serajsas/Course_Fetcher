@@ -8,8 +8,8 @@ export function connect(): void {
     mongoose.connect(
         url
     ).then(function () {
-        logger.info(NAMESPACE,"DB Connection has been established!!");
-    }).catch(err => {
-        console.log(err)
+        logger.info(NAMESPACE, "DB Connection has been established!!");
+    }).catch((err: any) => {
+        logger.error(NAMESPACE, err.message);
     })
 }
