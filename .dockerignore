@@ -1,0 +1,9 @@
+.git
+node_modules
+.vscode
+.gitignore
+.idea
+Dockerfile
+test
+*.yml
+*.iml

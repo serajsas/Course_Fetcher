@@ -1,3 +1,5 @@
+import config from "./config";
+
 const info = (namespace: string, message: string, object?: any) => {
     if (object) {
         console.info(`[${getTimeStamp()}] [INFO] [${namespace}] ${message}`, object);
@@ -23,10 +25,12 @@ const error = (namespace: string, message: string, object?: any) => {
 };
 
 const debug = (namespace: string, message: string, object?: any) => {
-    if (object) {
-        console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`, object);
-    } else {
-        console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`);
+    if (!config.production) {
+        if (object) {
+            console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`, object);
+        } else {
+            console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`);
+        }
     }
 };
 

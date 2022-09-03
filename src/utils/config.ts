@@ -1,18 +1,14 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({path: path.join(__dirname, '..', '/.env')});
+dotenv.config({path: path.join(__dirname, '../', '../', '/.env')});
 
-const MYSQL_HOST = process.env.MYSQL_HOST;
-const MYSQL_DATABASE = process.env.MYSQL_DATABASE;
-const MYSQL_USER = process.env.MYSQL_USER;
-const MYSQL_PASS = process.env.MYSQL_PASS;
-
-const MYSQL = {
-    host: MYSQL_HOST,
-    database: MYSQL_DATABASE,
-    user: MYSQL_USER,
-    pass: MYSQL_PASS
+const MONGOOSE_USERNAME = process.env.DB_USERNAME;
+const MONGOOSE_PASSWORD = process.env.DB_PASSWORD;
+const PRODUCTION_FLAG = process.env.PRODUCTION;
+const MONGOOSE = {
+    user: MONGOOSE_USERNAME,
+    pass: MONGOOSE_PASSWORD
 };
 
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME;
@@ -24,7 +20,9 @@ const SERVER = {
 };
 
 const config = {
-    mysql: MYSQL,
-    server: SERVER
+    mongoose: MONGOOSE,
+    server: SERVER,
+    production: PRODUCTION_FLAG
 };
+
 export default config;

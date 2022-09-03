@@ -3,22 +3,33 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "docker:start": "docker-compose up -d --build",
+    "docker:stop": "docker-compose down",
+    "docker:clean-image": "docker rmi $(docker images --filter \"dangling=true\" -q --no-trunc)",
     "start": "npx ts-node src/Server.ts",
-    "test": "nodemon src/Server.ts"
+    "debug": "nodemon src/Server.ts",
+    "test": "mocha --require ts-node/register --timeout 10000 test/**/*.spec.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/chai": "^4.3.3",
+    "@types/chai-as-promised": "^7.1.5",
     "@types/express": "^4.17.13",
+    "@types/mocha": "^9.1.1",
     "@types/node": "^18.7.8",
     "@types/nodemon": "^1.19.2",
+    "axios": "^0.27.2",
     "body-parser": "^1.20.0",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "mocha": "^10.0.0",
+    "mongoose": "^6.5.3",
+    "nodemon": "^2.0.19",
     "ts-node": "^10.9.1",
     "typescript": "^4.7.4"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.19"
   }
 }
