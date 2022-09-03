@@ -7,7 +7,8 @@ export class PreReqsNotFoundInDB extends Error {
 
 export class CourseDoesNotExist extends Error {
     constructor() {
-        super("Invalid course or course might not be offered for this session");
+        super("Invalid course, course might not be offered for this session, " +
+            "or is not offered in selected campus");
         Error.captureStackTrace(this, CourseDoesNotExist);
     }
 }

@@ -13,6 +13,7 @@ const courseAPI: ICourseFetch = new CourseFetch();
 router.get('/', async (req, res) => {
     const departmentName: any = req.query.dept;
     const courseNumber: any = req.query.number;
+    const campus: any = req.query.campus;
     logger.debug(NAMESPACE, "Responding to get request");
     if (!departmentName || !courseNumber) {
         logger.error(NAMESPACE, "departmentName and courseNumber are required but found undefined!!");
@@ -22,7 +23,8 @@ router.get('/', async (req, res) => {
     try {
         logger.debug(NAMESPACE, "Fetching course preReqs");
         preReqs = await courseAPI.getCoursePreReqs(departmentName.toUpperCase(),
-            parseInt(courseNumber));
+            parseInt(courseNumber), campus != undefined ? campus.toUpperCase() : "")
+        ;
     } catch (e: any) {
         logger.error(NAMESPACE, "No course matching is found!", {departmentName, courseNumber});
         return res.status(400).send({

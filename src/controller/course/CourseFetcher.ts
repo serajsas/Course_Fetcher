@@ -13,7 +13,7 @@ export class CourseFetcher implements ICourseFetch {
         this.courseDAO = new CourseDAO();
     }
 
-    async getCoursePreReqs(deptName: string, courseNumber: number): Promise<ICourse> {
+    async getCoursePreReqs(deptName: string, courseNumber: number, campus?: string): Promise<ICourse> {
         let preReqs: ICourse = {
             courseTitle: "",
             courseDescription: "",
@@ -28,7 +28,7 @@ export class CourseFetcher implements ICourseFetch {
                 logger.debug(NAMESPACE, e.message);
                 let data: ICourse;
                 try {
-                    data = await getCourseWithPreReqs(deptName, courseNumber);
+                    data = await getCourseWithPreReqs(deptName, courseNumber, campus);
                     await this.courseDAO.insertPreReqCourse(data.courseNumber,
                         data.courseDepartment,
                         data.preRequisites,
