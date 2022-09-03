@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
             message: e.message,
         });
     }
-    return res.status(200).send(preReqs);
+    return res.status(200).send({data: preReqs});
 })
 
 

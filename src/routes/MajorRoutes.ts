@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
                     message: e.message,
                 });
             }
-            return res.status(200).send(requirementsTwo);
+            return res.status(200).send({data: requirementsTwo});
         } else {
             logger.error(NAMESPACE, "requirementsOne returned with no result and majorName does not include \"and\"");
             return res.status(400).send({
@@ -43,7 +43,7 @@ router.get('/', async (req, res) => {
             });
         }
     }
-    return res.status(200).send(requirementsOne);
+    return res.status(200).send({data: requirementsOne});
 })
 
 export = router;
