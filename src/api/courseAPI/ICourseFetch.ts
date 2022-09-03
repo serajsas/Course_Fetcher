@@ -3,7 +3,7 @@ import {ICourse} from "../../models/course/CourseModel";
 
 export interface ICourseFetch {
     /**
-     * Finds the pre-requisites for a given course
+     * Finds the pre-requisites for a given course.
      * @param deptName
      * @param courseNumber
      */

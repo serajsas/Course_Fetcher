@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(bodyParser.json());
 
-app.use('/prerequisites', CourseRoutes);
+app.use('/prerequisite', CourseRoutes);
 app.use('/major', MajorRoutes);
 
 app.get("*", (req, res) => {
