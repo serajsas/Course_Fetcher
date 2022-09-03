@@ -1,6 +1,9 @@
 import * as cheerio from 'cheerio';
 import axios from "axios";
 import {CourseDoesNotExist, ICourse} from "../../models/course/CourseModel";
+import logger from "../../utils/logger";
+
+const NAMESPACE = "src/scrapers/course/CoursePreReqsScraper.ts";
 
 export async function getCourseWithPreReqs(courseDepartment: string, courseNumber: number): Promise<ICourse> {
     const response =
@@ -22,5 +25,6 @@ export async function getCourseWithPreReqs(courseDepartment: string, courseNumbe
         courseNumber: courseNumber,
         preRequisites: preReqs
     }
+    logger.debug(NAMESPACE, "Course found", course);
     return Promise.resolve(course);
 }
