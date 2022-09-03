@@ -1,10 +1,11 @@
 import fs from "fs/promises";
 import path from "path";
-import logger from "./logger";
+import {Promise} from "mongoose";
 
 export class ErrorReadingFile extends Error {
-    constructor(msg?: string) {
-        super(msg);
+    constructor(message?: string) {
+        super(message);
+        Error.captureStackTrace(this, ErrorReadingFile);
     }
 }
 
@@ -17,4 +18,14 @@ export async function readLocalTestFile(filePath: string): Promise<Array<string>
         throw new ErrorReadingFile("Error reading file!");
     }
     return preReqs;
+}
+
+export async function readDirectoryFiles(directoryPath: string): Promise<Array<string>> {
+    let files: Array<string> = [];
+    try {
+        files = await fs.readdir(path.join(__dirname, "../../", directoryPath), 'utf8');
+    } catch (e: any) {
+        throw new ErrorReadingFile("Error reading directory!");
+    }
+    return Promise.resolve(files);
 }

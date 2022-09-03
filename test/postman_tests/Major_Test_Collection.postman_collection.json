@@ -1,0 +1,703 @@
+{
+	"info": {
+		"_postman_id": "56fdf792-eebf-4607-9020-ea8a3b172231",
+		"name": "Major_Test_Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test major with upper case",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"const majors = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain physics as one of the majors returned\", () => {",
+							"    majors.every((major)=>{",
+							"        return pm.expect(major.majorTitle.includes(\"Physics\")).to.be.true;",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "4",
+							"type": "default",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/major/?name=Physics",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Physics"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test without providing major name and specialization",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response should return 404\", () => {",
+							"    pm.response.to.have.status(404);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "4",
+							"type": "default",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/major/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test without providing major name only",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response should return 404\", () => {",
+							"    pm.response.to.have.status(404);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "4",
+							"type": "default",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/major/?specialization=mathematics",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "specialization",
+							"value": "mathematics"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tests a single major with specialization as combined major",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 400\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"",
+							"pm.test(\"Response should return an error because this is not a valid major\", () => {",
+							"    pm.expect(responseJson.message).to.equals(\"Invalid major!!\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "4",
+							"type": "default",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/major/?name=physics&specialization=combined major",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "physics"
+						},
+						{
+							"key": "specialization",
+							"value": "combined major"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test major with specialization with matching strings to the ubc website",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"const majors = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain physics and honours in all of the majors returned\", () => {",
+							"    majors.every((major)=>{",
+							"        return (pm.expect(major.majorTitle.includes(\"Physics\")).to.be.true && pm.expect(major.majorTitle.includes(\"Honours\")).to.be.true);",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/major/?name=Physics&specialization=Honours",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Physics"
+						},
+						{
+							"key": "specialization",
+							"value": "Honours"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test major with specialization with lower case strings to the ubc website",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"const majors = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain physics and honours in all of the majors returned\", () => {",
+							"    majors.every((major)=>{",
+							"        return (pm.expect(major.majorTitle.includes(\"Physics\")).to.be.true && pm.expect(major.majorTitle.includes(\"Honours\")).to.be.true);",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/major/?name=physics&specialization=honours",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "physics"
+						},
+						{
+							"key": "specialization",
+							"value": "honours"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test major with specialization with mixed strings case to the ubc website",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"const majors = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain physics and honours in all of the majors returned\", () => {",
+							"    majors.every((major)=>{",
+							"        return (pm.expect(major.majorTitle.includes(\"Physics\")).to.be.true && pm.expect(major.majorTitle.includes(\"Honours\")).to.be.true);",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/major/?name=pHYsics&specialization=honOURS",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "pHYsics"
+						},
+						{
+							"key": "specialization",
+							"value": "honOURS"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tests a combined major with specialization as combined major",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"const majors = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain computer science and statistics as the majors returned\", () => {",
+							"    majors.every((major)=>{",
+							"        return pm.expect(major.majorTitle.includes(\"Computer Science and Statistics\")).to.be.true;",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "4",
+							"type": "default",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/major/?name=computer science and statistics&specialization=combined major",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "computer science and statistics"
+						},
+						{
+							"key": "specialization",
+							"value": "combined major"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tests a combined major with specialization as honours",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"const majors = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain computer science and statistics as the majors returned\", () => {",
+							"    majors.every((major)=>{",
+							"        return (pm.expect(major.majorTitle.includes(\"Computer Science and Statistics\")).to.be.true && pm.expect(major.majorTitle.includes(\"Honours\")).to.be.true);",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "4",
+							"type": "default",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/major/?name=computer science and statistics&specialization=honours",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "computer science and statistics"
+						},
+						{
+							"key": "specialization",
+							"value": "honours"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tests a combined major with specialization as combined honours",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"const majors = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain computer science and statistics as the majors returned\", () => {",
+							"    majors.every((major)=>{",
+							"        return (pm.expect(major.majorTitle.includes(\"Computer Science and Statistics\")).to.be.true && pm.expect(major.majorTitle.includes(\"Honours\")).to.be.true);",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "4",
+							"type": "default",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/major/?name=computer science and statistics&specialization=combined honours",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "computer science and statistics"
+						},
+						{
+							"key": "specialization",
+							"value": "combined honours"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tests a combined major with specialization as major",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"const majors = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain computer science and statistics as the majors returned\", () => {",
+							"    majors.every((major)=>{",
+							"        return pm.expect(major.majorTitle.includes(\"Computer Science and Statistics\")).to.be.true;",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "4",
+							"type": "default",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/major/?name=computer science and statistics&specialization=major",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"major",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "computer science and statistics"
+						},
+						{
+							"key": "specialization",
+							"value": "major"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
