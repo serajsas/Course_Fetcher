@@ -1,6 +1,8 @@
 import mongoose, {model} from "mongoose";
 import {ICourse, PreReqsNotFoundInDB} from "../../models/course/CourseModel";
 import logger from "../../utils/logger";
+import {data} from "cheerio/lib/api/attributes";
+import {connect} from "../../utils/dbConnector";
 
 const NAMESPACE = "src/dao/course/CourseDAO.ts";
 
@@ -8,7 +10,7 @@ const CourseSchema = new mongoose.Schema(
     {
         courseTitle: {
             type: String,
-            require: true
+            require: true,
         },
         courseDescription: {
             type: String,
@@ -16,11 +18,13 @@ const CourseSchema = new mongoose.Schema(
         },
         courseDepartment: {
             type: String,
-            require: true
+            require: true,
+            index: true
         },
         courseNumber: {
             type: Number,
-            require: true
+            require: true,
+            index: true
         },
         preRequisites: {
             type: String,
@@ -31,7 +35,14 @@ const CourseSchema = new mongoose.Schema(
 
 const Course = model<ICourse>('course', CourseSchema);
 
+
 export class CourseDAO {
+
+    constructor() {
+        Course.createIndexes().then(()=> {
+            logger.debug(NAMESPACE, "INDEXES INITIALIZED!!");
+        });
+    }
 
     /**
      * This method inserts a course and its preRequisites in the pre_req table
@@ -52,11 +63,11 @@ export class CourseDAO {
         });
         try {
             await course.save(() => {
-                logger.info(NAMESPACE, "Course saved!");
+                logger.debug(NAMESPACE, "Course saved!");
             });
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
-            return Promise.reject();
+            return Promise.reject(e);
         }
         return Promise.resolve(course);
     };
@@ -69,11 +80,11 @@ export class CourseDAO {
     async deletePreReqCourse(courseNumber: number,
                              courseDepartment: string): Promise<void> {
         try {
-            logger.info(NAMESPACE, "Deleting a course with all its preReqs");
+            logger.debug(NAMESPACE, "Deleting a course with all its preReqs");
             await Course.deleteMany({courseDepartment, courseNumber}).exec();
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
-            return Promise.reject();
+            return Promise.reject(e);
         }
         return Promise.resolve();
     };
@@ -87,11 +98,11 @@ export class CourseDAO {
         let result: Array<ICourse>;
 
         try {
-            logger.info(NAMESPACE, "Getting a course preReqs");
+            logger.debug(NAMESPACE, "Getting a course preReqs");
             result = await Course.find({courseDepartment, courseNumber}).exec();
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
-            return Promise.reject();
+            return Promise.reject(e);
         }
 
         if (result.length == 0) {

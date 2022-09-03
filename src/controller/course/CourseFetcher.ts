@@ -41,7 +41,7 @@ export class CourseFetcher implements ICourseFetch {
                 }
             }
         }
-        logger.info(NAMESPACE, "Retrieved preReqs for", {deptName, courseNumber})
+        logger.debug(NAMESPACE, "Retrieved preReqs for", {deptName, courseNumber})
         return Promise.resolve(preReqs);
     }
 }

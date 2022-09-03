@@ -5,6 +5,13 @@ export class MajorDoesNotExist extends Error {
     }
 }
 
+export class InvalidMajorString extends Error {
+    constructor() {
+        super("Invalid major!!");
+        Error.captureStackTrace(this, MajorDoesNotExist);
+    }
+}
+
 export interface MajorModel {
     majorTitle: string,
     requirements: Array<Requirement>

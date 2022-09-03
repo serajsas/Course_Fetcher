@@ -17,12 +17,12 @@ app.use('/prerequisites', CourseRoutes);
 app.use('/major', MajorRoutes);
 
 app.get("*", (req, res) => {
-    logger.info(NAMESPACE, "Server received a request")
+    logger.debug(NAMESPACE, "Server received a request")
     return res.status(404).send();
 });
 
 connect();
 
 app.listen(config.server.port, () => {
-    logger.info(NAMESPACE, `Server is running ${config.server.hostname}:${config.server.port}`)
+    logger.debug(NAMESPACE, `Server is running ${config.server.hostname}:${config.server.port}`)
 })

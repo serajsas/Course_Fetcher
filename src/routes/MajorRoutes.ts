@@ -11,7 +11,7 @@ const majorAPI: IMajorFetch = new MajorFetch();
 router.get('/', async (req, res) => {
     const majorName: any = req.query.name;
     let specialization: any = req.query.specialization;
-    logger.info(NAMESPACE, "Responding to get request");
+    logger.debug(NAMESPACE, "Responding to get request");
     if (!majorName) {
         logger.error(NAMESPACE, "majorName is required but found undefined!")
         return res.status(404).send();
@@ -19,13 +19,13 @@ router.get('/', async (req, res) => {
     let requirementsOne: Array<MajorModel> = [];
     let requirementsTwo: Array<MajorModel> = [];
     try {
-        logger.info(NAMESPACE, "Fetching requirementsOne");
+        logger.debug(NAMESPACE, "Fetching requirementsOne");
         requirementsOne = await majorAPI.getMajorRequirements(majorName,
             specialization);
     } catch (e: any) {
         if (majorName.includes("and")) {
             try {
-                logger.info(NAMESPACE, "Fetching requirementsTwo");
+                logger.debug(NAMESPACE, "Fetching requirementsTwo");
                 requirementsTwo = await majorAPI.getMajorRequirements(
                     majorName.split(" ").reverse().join(" "),
                     specialization);

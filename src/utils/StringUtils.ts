@@ -1,15 +1,42 @@
 import logger from "./logger";
+import {InvalidMajorString} from "../models/major/MajorModel";
 
 const NAMESPACE = "src/utils/StringUtils.ts";
 
-export function capitalizeStrings(arr: Array<string>): Array<string> {
-    logger.info(NAMESPACE, "capitalizeStrings", arr);
+export function isTwoStringsContainTheSameWords(pageMajor: string, major: string, specialization: string | undefined): boolean {
+    logger.debug(NAMESPACE, "isTwoStringsContainTheSameWords", {pageMajor, major, specialization});
+    if (pageMajor == undefined) {
+        logger.debug(NAMESPACE, "isTwoStringsContainTheSameWords is returning undefined!!");
+        return false;
+    }
+    let pageMajorCapitalized = capitalizeFirstLetterAndLowerRest(pageMajor.split(" ")).join(" ");
+    let majorCapitalized = capitalizeFirstLetterAndLowerRest(major.split(" ")).join(" ");
+    let specializationCapitalized: string = "";
+    if (specialization) {
+        specializationCapitalized = capitalizeFirstLetterAndLowerRest(specialization.split(" ")).join(" ");
+    }
+    let extractedMajor = extractMajorNameOnly(pageMajorCapitalized);
+    let majorCopy = isAnagram(extractedMajor, majorCapitalized);
+    let specializationCopy = isAnagram(extractedMajor, specializationCapitalized);
+    let majorCopyResult = equals(majorCopy.a_copy, majorCopy.b_copy);
+    if (specialization) {
+        let result = equals(specializationCopy.a_copy, specializationCopy.b_copy) ||
+            (pageMajorCapitalized.includes(specializationCapitalized) && majorCopyResult);
+        logger.debug(NAMESPACE, "isTwoStringsContainTheSameWords", {specializationCopy, result});
+        return result;
+    }
+    logger.debug(NAMESPACE, "isTwoStringsContainTheSameWords", {majorCopy, majorCopyResult});
+    return majorCopyResult;
+}
+
+export function capitalizeFirstLetterAndLowerRest(arr: Array<string>): Array<string> {
+    logger.debug(NAMESPACE, "capitalizeStrings", arr);
     let words: Array<string> = [];
     for (let i = 0; i < arr.length; i++) {
         if (!arr[i]) {
             continue;
         }
-        if (arr[i].includes('and')) {
+        if (arr[i].toLowerCase().includes('and')) {
             words.push('and');
             continue;
         }
@@ -19,9 +46,9 @@ export function capitalizeStrings(arr: Array<string>): Array<string> {
 }
 
 export function formatStringToGetMajorPage(major: string) {
-    logger.info(NAMESPACE, "formatStringToGetMajorPage", major);
+    logger.debug(NAMESPACE, "formatStringToGetMajorPage", major);
     let majors: Array<string> = major.split(" ").map(x => x.trim());
-    majors = capitalizeStrings(majors);
+    majors = capitalizeFirstLetterAndLowerRest(majors);
     major = majors.join(" ")
     if (major == "Cellular and Physiological Sciences" ||
         major == "Earth and Ocean Sciences" ||
@@ -31,7 +58,7 @@ export function formatStringToGetMajorPage(major: string) {
     majors = major.split("and").map(x => x.trim());
     if (majors.length <= 1) {
         majors = major.split(" ").map(x => x.trim());
-        majors = capitalizeStrings(majors);
+        majors = capitalizeFirstLetterAndLowerRest(majors);
         if (majors.length == 1) {
             return majors.join("");
         }
@@ -41,16 +68,15 @@ export function formatStringToGetMajorPage(major: string) {
     }
 }
 
-export function removeExtraWhiteSpaces(s: string) {
-    logger.info(NAMESPACE, "removeExtraWhiteSpaces", s);
-
+function removeExtraWhiteSpaces(s: string) {
+    logger.debug(NAMESPACE, "removeExtraWhiteSpaces", s);
     let arr: Array<string> = s.split(" ");
     arr = arr.map(s => s.trim());
     return arr.join(" ");
 }
 
 function isAnagram(pageMajor: string, major: string | undefined) {
-    logger.info(NAMESPACE, "isAnagram", {pageMajor, major});
+    logger.debug(NAMESPACE, "isAnagram", {pageMajor, major});
     if (major == undefined)
         return {};
     let a_copy = pageMajor.split(" ");
@@ -62,25 +88,10 @@ function isAnagram(pageMajor: string, major: string | undefined) {
     return {a_copy, b_copy};
 }
 
-export function isTwoStringsContainTheSameWordsSeperatedWithAnd(pageMajor: string, major: string, specialization: string | undefined): boolean {
-    logger.info(NAMESPACE, "isTwoStringsContainTheSameWordsSeperatedWithAnd", {pageMajor, major, specialization});
-    if (pageMajor == undefined)
-        return false;
-    let extractedMajor = extractMajorNameOnly(pageMajor);
-    let majorCopy = isAnagram(extractedMajor, major);
-    let specializationCopy = isAnagram(extractedMajor, specialization);
-    let majorCopyResult = equals(majorCopy.a_copy, majorCopy.b_copy);
-    if (specialization) {
-        let result = equals(specializationCopy.a_copy, specializationCopy.b_copy) ||
-            (pageMajor.includes(specialization) && majorCopyResult);
-        logger.info(NAMESPACE, "isTwoStringsContainTheSameWordsSeperatedWithAnd", {specializationCopy, result});
-        return result;
-    }
-    logger.info(NAMESPACE, "isTwoStringsContainTheSameWordsSeperatedWithAnd", {majorCopy, majorCopyResult});
-    return majorCopyResult;
-}
-
 function extractMajorNameOnly(major: string): string {
+    if (!major.includes(":")) {
+        throw new InvalidMajorString();
+    }
     let extractedMajor = major.split(":")[1];
     let result = "";
     for (let i = 0; i < extractedMajor.length; i++) {
@@ -89,7 +100,7 @@ function extractMajorNameOnly(major: string): string {
         }
         result = result + extractedMajor[i];
     }
-    logger.info(NAMESPACE, "extractMajorNameOnly", result.trim());
+    logger.debug(NAMESPACE, "extractMajorNameOnly", result.trim());
     return result.trim();
 }
 

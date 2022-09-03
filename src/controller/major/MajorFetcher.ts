@@ -1,18 +1,31 @@
 import {IMajorFetch} from "../../api/majorAPI/IMajorFetch";
 import {MajorDoesNotExist, MajorModel} from "../../models/major/MajorModel";
-import {getMajorCalendar} from "../../scrapers/major/MajorCalendarScraper";
 import logger from "../../utils/logger";
+import {MajorDAO} from "../../dao/major/MajorDAO";
+import {MajorCalendarScraper} from "../../scrapers/major/MajorCalendarScraper";
 
 const NAMESPACE = "src/controller/major/MajorFetcher.ts";
 
 export class MajorFetcher implements IMajorFetch {
-    async getMajorRequirements(majorName: string, specialization: string): Promise<Array<MajorModel>> {
-        let major = await getMajorCalendar(majorName, specialization);
+    private readonly majorDAO: MajorDAO;
+    private majorCalendarScraper: MajorCalendarScraper;
 
-        if (major.length == 0) {
-            logger.error(NAMESPACE, "major.length is zero for", {majorName, specialization});
-            throw new MajorDoesNotExist();
+    constructor() {
+        this.majorDAO = new MajorDAO();
+        this.majorCalendarScraper = new MajorCalendarScraper(this.majorDAO);
+    }
+
+    async getMajorRequirements(majorName: string, specialization: string): Promise<Array<MajorModel>> {
+        let result: Array<MajorModel>;
+        try {
+            result = await this.majorDAO.getMajorModel(majorName, specialization);
+        } catch (e: any) {
+            result = await this.majorCalendarScraper.getMajorCalendar(majorName, specialization);
+            if (result.length == 0) {
+                logger.error(NAMESPACE, "major.length is zero for", {majorName, specialization});
+                throw new MajorDoesNotExist();
+            }
         }
-        return Promise.resolve(major);
+        return Promise.resolve(result);
     }
 }
