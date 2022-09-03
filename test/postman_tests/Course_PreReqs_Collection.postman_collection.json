@@ -1,0 +1,194 @@
+{
+	"info": {
+		"_postman_id": "6971c3b5-d9b0-4fe2-9a7a-625416eeef89",
+		"name": "Course_PreReqs_Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test dept and number both exist Okanagan campus",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"const course = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain the department and number for requested course\", () => {",
+							"    return (pm.expect(course.courseDepartment).to.be.equal(Object.values(pm.request.toJSON().url.query[0])[1]) && ",
+							"    pm.expect(course.courseNumber).to.be.equal(parseInt(Object.values(pm.request.toJSON().url.query[1])[1])))",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/prerequisite/?dept=CRWR&number=160&campus=UBCO",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"prerequisite",
+						""
+					],
+					"query": [
+						{
+							"key": "dept",
+							"value": "CRWR"
+						},
+						{
+							"key": "number",
+							"value": "160"
+						},
+						{
+							"key": "campus",
+							"value": "UBCO"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test dept and number both exist Vancouver campus",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Response should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"const course = responseJson.data;",
+							"",
+							"pm.test(\"Response should contain the department and number for requested course\", () => {",
+							"    return (pm.expect(course.courseDepartment).to.be.equal(Object.values(pm.request.toJSON().url.query[0])[1]) && ",
+							"    pm.expect(course.courseNumber).to.be.equal(parseInt(Object.values(pm.request.toJSON().url.query[1])[1])))",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/prerequisite/?dept=MATH&number=303",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"prerequisite",
+						""
+					],
+					"query": [
+						{
+							"key": "dept",
+							"value": "MATH"
+						},
+						{
+							"key": "number",
+							"value": "303"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test dept and number does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response should return 404\", () => {",
+							"    pm.response.to.have.status(404);",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/prerequisite/?dept=MATH",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"prerequisite",
+						""
+					],
+					"query": [
+						{
+							"key": "dept",
+							"value": "MATH"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test dept does not exist with only number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response should return 404\", () => {",
+							"    pm.response.to.have.status(404);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/prerequisite/?number=304",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"prerequisite",
+						""
+					],
+					"query": [
+						{
+							"key": "number",
+							"value": "304"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
