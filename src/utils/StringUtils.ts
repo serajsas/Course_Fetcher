@@ -68,7 +68,7 @@ export function formatStringToGetMajorPage(major: string) {
     }
 }
 
-function removeExtraWhiteSpaces(s: string) {
+export function removeExtraWhiteSpaces(s: string) {
     logger.debug(NAMESPACE, "removeExtraWhiteSpaces", s);
     let arr: Array<string> = s.split(" ");
     arr = arr.map(s => s.trim());
