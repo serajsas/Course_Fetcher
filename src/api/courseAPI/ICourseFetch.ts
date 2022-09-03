@@ -7,5 +7,5 @@ export interface ICourseFetch {
      * @param deptName
      * @param courseNumber
      */
-    getCoursePreReqs(deptName: string, courseNumber: number): Promise<ICourse>;
+    getCoursePreReqs(deptName: string, courseNumber: number, campus?: string): Promise<ICourse>;
 }

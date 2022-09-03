@@ -5,9 +5,10 @@ import logger from "../../utils/logger";
 
 const NAMESPACE = "src/scrapers/course/CoursePreReqsScraper.ts";
 
-export async function getCourseWithPreReqs(courseDepartment: string, courseNumber: number): Promise<ICourse> {
+export async function getCourseWithPreReqs(courseDepartment: string, courseNumber: number, campus?: string): Promise<ICourse> {
+    let campusURI = campus != undefined && campus === "UBCO" ? "&campuscd=UBCO" : "";
     const response =
-        await axios.get(`https://www.courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=${courseDepartment}&course=${courseNumber}`);
+        await axios.get(`https://www.courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=${courseDepartment}&course=${courseNumber}` + campusURI);
     const $ = cheerio.load(response.data);
 
     let title: string =
