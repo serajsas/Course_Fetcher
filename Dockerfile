@@ -8,8 +8,6 @@ RUN npm install
 
 COPY . .
 
-RUN npm install
-
 EXPOSE ${SERVER_PORT}
 
-CMD [ "npm", "run"]
+CMD [ "npm", "start"]
