@@ -1,13 +1,13 @@
 # UBC Major And Courses API
 
-# STATUS:
+## STATUS:
 [![CI](https://github.com/serajsas/Course_Fetcher/actions/workflows/node.js.yml/badge.svg?branch=rel)](https://github.com/serajsas/Course_Fetcher/actions/workflows/node.js.yml)
 
-# Features:
+## Features:
 - Allow user to fetch real time courses from UBC website. 
 - Allow user to fetch any Science Major requirements. 
 
-# Installation:
+## Installation:
 
 ```
 Clone the repo from [Github](https://github.com/serajsas/Course_Fetcher.git)
@@ -23,7 +23,15 @@ To run the tests
 npm run test
 ```
 
-# Exposed endpoints:
+## Documentation for API Endpoints
+
+All URIs are relative to *http://localhost:8000/api/v1*
+
+Class | Method | HTTP request | Description
+------------ | ------------- | ------------- | -------------
+*CourseApi* | [**courseGet**](docs/CourseApi.md#courseGet) | **GET** /course/ | Get course details
+*MajorApi* | [**majorGet**](docs/MajorApi.md#majorGet) | **GET** /major/ | Get major requirements
+
 - api_host/prerequisite/?dept=string&number=int
   - dept is the department code, example: CPSC, MATH. It's case insensitive. 
   - number is the course number, example 304. 
@@ -33,7 +41,5 @@ npm run test
   - To get the requirements for a specific specialization such as Cognition and Brain, make sure to provide the name of the major where the requirements could be found. For example, Cognition and Brain is under major Neuroscience. 
 
 # Contribution: 
-- Please feel free to create any issues for any bugs found. 
-- Please feel free to create any Pull requests if you would like to participate.
-
-
+- Please feel free to create issue for any bugs found. 
+- Please feel free to create Pull requests if you would like to participate.
