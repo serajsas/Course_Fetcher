@@ -57,7 +57,7 @@ function removeDuplicateTextFromPreReqsAndCoReqs(text: string): string {
     }
     let correctStringWithoutDuplicates = "";
     for (let i = 0; i < textArr.length; i++) {
-        if (i == secondOccurrence) {
+        if (i == secondOccurrence && secondOccurrence != 0) {
             correctStringWithoutDuplicates = correctStringWithoutDuplicates + leftOver;
             break;
         }

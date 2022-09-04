@@ -32,7 +32,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/api/v1/course/?dept=CRWR&number=160",
+					"raw": "http://localhost:8000/api/v1/course/?dept=CRWR&number=160&campus=okanagan",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -57,6 +57,10 @@
 							"key": "campus",
 							"value": "UBCO",
 							"disabled": true
+						},
+						{
+							"key": "campus",
+							"value": "okanagan"
 						}
 					]
 				}
