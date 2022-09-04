@@ -6,6 +6,7 @@ import logger from "../../utils/logger";
 const NAMESPACE = "src/scrapers/course/CoursePreReqsScraper.ts";
 
 export async function getCourseWithPreReqs(courseDepartment: string, courseNumber: number, campus?: string): Promise<ICourse> {
+    logger.debug(NAMESPACE, "Starting course scrapping", {courseDepartment, courseNumber, campus});
     let campusURI = campus != undefined && campus.toLowerCase().includes("okanagan") ? "&campuscd=UBCO" : "";
     const response =
         await axios.get(`https://www.courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=${courseDepartment}&course=${courseNumber}` + campusURI,
