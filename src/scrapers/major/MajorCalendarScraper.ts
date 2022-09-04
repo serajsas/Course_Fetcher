@@ -22,7 +22,7 @@ export class MajorCalendarScraper {
 
     async getMajorCalendar(major: string, specialization: string): Promise<Array<MajorModel>> {
         let majorLink: string = await this.getMajorTree(major);
-        const response = await axios.get(majorLink);
+        const response = await axios.get(majorLink, {proxy: false});
         const page = cheerio.load(response.data);
         page('sup').remove();
         page('.footnote').remove();
@@ -98,7 +98,7 @@ export class MajorCalendarScraper {
     private async getMajorTree(major: string): Promise<string> {
         let uriComponent = "index.cfm?tree=12,215,410,1457";
         const response =
-            await axios.get(`https://www.calendar.ubc.ca/vancouver/${uriComponent}`);
+            await axios.get(`https://www.calendar.ubc.ca/vancouver/${uriComponent}`, {proxy: false});
         const $ = cheerio.load(response.data);
         let majorString = formatStringToGetMajorPage(major);
         let tree: string | undefined = $(`a:contains(${majorString.split("and")[0]})`).attr("href");

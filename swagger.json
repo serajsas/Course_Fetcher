@@ -1,0 +1,71 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "UBC Course and Major",
+    "version": "1.0.0",
+    "description": "An API that allows getting course and major(currently supporting Science majors only)"
+  },
+  "host": "localhost:8000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Course",
+      "description": "API for fetching course details"
+    },
+    {
+      "name": "Major",
+      "description": "API for fetching major requirements"
+    }
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/course/": {
+      "get": {
+        "summary": "Get course details",
+        "tags": [
+          "Course"
+        ],
+        "description": "Returns course details",
+        "parameters": [
+          {
+            "name": "dept",
+            "description": "Department code",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "number",
+            "description": "Course Number",
+            "in": "query",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "campus",
+            "description": "Campus is either Vancouver or Okanagan",
+            "in": "query",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Resource not found"
+          }
+        }
+      }
+    }
+  }
+}

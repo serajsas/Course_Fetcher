@@ -19,19 +19,18 @@ router.get('/', async (req, res) => {
         logger.error(NAMESPACE, "departmentName and courseNumber are required but found undefined!!");
         return res.status(404).send();
     }
-    let preReqs: ICourse;
+    let course: ICourse;
     try {
-        logger.debug(NAMESPACE, "Fetching course preReqs");
-        preReqs = await courseAPI.getCoursePreReqs(departmentName.toUpperCase(),
-            parseInt(courseNumber), campus != undefined ? campus.toUpperCase() : "")
-        ;
+        logger.debug(NAMESPACE, "Fetching course course");
+        course = await courseAPI.getCoursePreReqs(departmentName.toUpperCase(),
+            parseInt(courseNumber), campus != undefined ? campus.toUpperCase() : "");
     } catch (e: any) {
         logger.error(NAMESPACE, "No course matching is found!", {departmentName, courseNumber});
         return res.status(400).send({
             message: e.message,
         });
     }
-    return res.status(200).send({data: preReqs});
+    return res.status(200).send({data: course});
 })
 
 

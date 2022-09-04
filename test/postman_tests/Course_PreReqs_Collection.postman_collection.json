@@ -32,14 +32,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/prerequisite/?dept=CRWR&number=160&campus=UBCO",
+					"raw": "http://localhost:8000/api/v1/course/?dept=CRWR&number=160",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
-						"prerequisite",
+						"api",
+						"v1",
+						"course",
 						""
 					],
 					"query": [
@@ -53,7 +55,8 @@
 						},
 						{
 							"key": "campus",
-							"value": "UBCO"
+							"value": "UBCO",
+							"disabled": true
 						}
 					]
 				}
@@ -87,14 +90,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/prerequisite/?dept=MATH&number=303",
+					"raw": "http://localhost:8000/api/v1/course/?dept=MATH&number=320",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
-						"prerequisite",
+						"api",
+						"v1",
+						"course",
 						""
 					],
 					"query": [
@@ -104,7 +109,7 @@
 						},
 						{
 							"key": "number",
-							"value": "303"
+							"value": "320"
 						}
 					]
 				}
@@ -131,14 +136,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/prerequisite/?dept=MATH",
+					"raw": "http://localhost:8000/api/v1/course/?dept=MATH",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
-						"prerequisite",
+						"api",
+						"v1",
+						"course",
 						""
 					],
 					"query": [
@@ -170,14 +177,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/prerequisite/?number=304",
+					"raw": "http://localhost:8000/api/v1/course/?number=304",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
-						"prerequisite",
+						"api",
+						"v1",
+						"course",
 						""
 					],
 					"query": [

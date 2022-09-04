@@ -1,5 +1,5 @@
 import mongoose, {model} from "mongoose";
-import {ICourse, PreReqsNotFoundInDB} from "../../models/course/CourseModel";
+import {fromDAO, ICourse, CourseNotFoundInDB} from "../../models/course/CourseModel";
 import logger from "../../utils/logger";
 import {data} from "cheerio/lib/api/attributes";
 import {connect} from "../../utils/dbConnector";
@@ -29,6 +29,14 @@ const CourseSchema = new mongoose.Schema(
         preRequisites: {
             type: String,
             require: true
+        },
+        coRequisites: {
+            type: String,
+            require: true
+        },
+        campus: {
+            type: String,
+            require: true
         }
     }
 );
@@ -39,27 +47,34 @@ const Course = model<ICourse>('course', CourseSchema);
 export class CourseDAO {
 
     constructor() {
-        Course.createIndexes().then(()=> {
+        Course.createIndexes().then(() => {
             logger.debug(NAMESPACE, "INDEXES INITIALIZED!!");
         });
     }
 
     /**
-     * This method inserts a course and its preRequisites in the pre_req table
+     * This method inserts a course into the course table
      * @param courseNumber
      * @param courseDepartment
      * @param preReqs
+     * @param title
+     * @param description
+     * @param campus
+     * @param coReqs
      */
-    async insertPreReqCourse(courseNumber: number,
-                             courseDepartment: string,
-                             preReqs: string, title: string, description: string):
+    async insertCourse(courseNumber: number,
+                       courseDepartment: string,
+                       preReqs: string, title: string, description: string, campus: string, coReqs: string):
         Promise<ICourse> {
         let course = new Course({
             courseDepartment: courseDepartment,
             courseNumber: courseNumber,
             preRequisites: preReqs,
+            coRequisites: coReqs,
+            campus: campus,
             courseTitle: title,
-            courseDescription: description
+            courseDescription: description,
+
         });
         try {
             await course.save(() => {
@@ -73,12 +88,12 @@ export class CourseDAO {
     };
 
     /**
-     * This method removes a course with all its preReqs
+     * This method removes a course with all its details
      * @param courseNumber
      * @param courseDepartment
      */
-    async deletePreReqCourse(courseNumber: number,
-                             courseDepartment: string): Promise<void> {
+    async deleteCourse(courseNumber: number,
+                       courseDepartment: string): Promise<void> {
         try {
             logger.debug(NAMESPACE, "Deleting a course with all its preReqs");
             await Course.deleteMany({courseDepartment, courseNumber}).exec();
@@ -90,33 +105,31 @@ export class CourseDAO {
     };
 
     /**
-     * This method returns all the preReqs for a given course
+     * This method returns all the courses for a given courseNumber and courseDepartment
      * @param courseNumber
      * @param courseDepartment
+     * @param campus
      */
-    async getPreReqCourses(courseNumber: number, courseDepartment: string): Promise<ICourse> {
+    async getCourse(courseNumber: number, courseDepartment: string, campus: string): Promise<ICourse> {
         let result: Array<ICourse>;
-
+        if (campus.toLowerCase().includes("okanagan")) {
+            campus = "UBC Okanagan";
+        } else {
+            campus = "UBC Vancouver";
+        }
         try {
-            logger.debug(NAMESPACE, "Getting a course preReqs");
-            result = await Course.find({courseDepartment, courseNumber}).exec();
+            logger.debug(NAMESPACE, "Getting a course", {courseDepartment, courseNumber, campus});
+            result = await Course.find({courseDepartment, courseNumber, campus}).exec();
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
             return Promise.reject(e);
         }
 
         if (result.length == 0) {
-            return Promise.reject(new PreReqsNotFoundInDB());
+            return Promise.reject(new CourseNotFoundInDB());
         }
 
-        let courseResult: ICourse = {
-            courseTitle: result[0].courseTitle,
-            courseDescription: result[0].courseDescription,
-            courseDepartment: result[0].courseDepartment,
-            courseNumber: result[0].courseNumber,
-            preRequisites: result[0].preRequisites
-
-        }
+        let courseResult = fromDAO(result[0]);
         return Promise.resolve(courseResult);
     }
 }

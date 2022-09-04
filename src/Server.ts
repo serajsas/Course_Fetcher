@@ -3,18 +3,23 @@ import bodyParser from "body-parser";
 import logger from "./utils/logger";
 import config from "./utils/config";
 import CourseRoutes from './routes/CourseRoutes';
+import swaggerDocs from '../swagger.json';
+import swaggerUI from 'swagger-ui-express';
 import {connect} from "./utils/dbConnector";
 import MajorRoutes from './routes/MajorRoutes';
 
 const NAMESPACE = "src/Server.ts";
 
 const app = express();
+
+app.use('/api/v1/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(bodyParser.json());
 
-app.use('/prerequisite', CourseRoutes);
-app.use('/major', MajorRoutes);
+app.use('/api/v1/course', CourseRoutes);
+app.use('/api/v1/major', MajorRoutes);
 
 app.get("*", (req, res) => {
     logger.debug(NAMESPACE, "Server received a request")

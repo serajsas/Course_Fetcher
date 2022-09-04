@@ -53,13 +53,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/major/?name=Physics",
+					"raw": "http://localhost:8000/api/v1/major/?name=Physics",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
@@ -111,13 +113,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/major/",
+					"raw": "http://localhost:8000/api/v1/major/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					]
@@ -163,13 +167,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/major/?specialization=mathematics",
+					"raw": "http://localhost:8000/api/v1/major/?specialization=mathematics",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
@@ -228,13 +234,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/major/?name=physics&specialization=combined major",
+					"raw": "http://localhost:8000/api/v1/major/?name=physics&specialization=combined major",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
@@ -281,13 +289,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/major/?name=Physics&specialization=Honours",
+					"raw": "http://localhost:8000/api/v1/major/?name=Physics&specialization=Honours",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
@@ -334,13 +344,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/major/?name=physics&specialization=honours",
+					"raw": "http://localhost:8000/api/v1/major/?name=physics&specialization=honours",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
@@ -387,13 +399,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/major/?name=pHYsics&specialization=honOURS",
+					"raw": "http://localhost:8000/api/v1/major/?name=pHYsics&specialization=honOURS",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
@@ -459,13 +473,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/major/?name=computer science and statistics&specialization=combined major",
+					"raw": "http://localhost:8000/api/v1/major/?name=computer science and statistics&specialization=combined major",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
@@ -531,13 +547,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/major/?name=computer science and statistics&specialization=honours",
+					"raw": "http://localhost:8000/api/v1/major/?name=computer science and statistics&specialization=honours",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
@@ -603,13 +621,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/major/?name=computer science and statistics&specialization=combined honours",
+					"raw": "http://localhost:8000/api/v1/major/?name=computer science and statistics&specialization=combined honours",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
@@ -675,13 +695,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/major/?name=computer science and statistics&specialization=major",
+					"raw": "http://localhost:8000/api/v1/major/?name=computer science and statistics&specialization=major",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"major",
 						""
 					],
