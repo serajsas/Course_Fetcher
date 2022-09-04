@@ -16,34 +16,13 @@ router.get('/', async (req, res) => {
         logger.error(NAMESPACE, "majorName is required but found undefined!")
         return res.status(404).send();
     }
-    let requirementsOne: Array<MajorModel> = [];
-    let requirementsTwo: Array<MajorModel> = [];
+    let requirements: Array<MajorModel> = []
     try {
-        logger.debug(NAMESPACE, "Fetching requirementsOne");
-        requirementsOne = await majorAPI.getMajorRequirements(majorName,
-            specialization);
+        requirements = await majorAPI.getMajorRequirements(majorName, specialization);
     } catch (e: any) {
-        if (majorName.includes("and")) {
-            try {
-                logger.debug(NAMESPACE, "Fetching requirementsTwo");
-                requirementsTwo = await majorAPI.getMajorRequirements(
-                    majorName.split(" ").reverse().join(" "),
-                    specialization);
-            } catch (e: any) {
-                logger.error(NAMESPACE, "requirementsTwo returned with no result");
-                return res.status(400).send({
-                    message: e.message,
-                });
-            }
-            return res.status(200).send({data: requirementsTwo});
-        } else {
-            logger.error(NAMESPACE, "requirementsOne returned with no result and majorName does not include \"and\"");
-            return res.status(400).send({
-                message: e.message,
-            });
-        }
+        return res.status(400).send({message: e.message})
     }
-    return res.status(200).send({data: requirementsOne});
+    return res.status(200).send({data: requirements});
 })
 
 export = router;

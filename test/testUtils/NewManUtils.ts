@@ -12,7 +12,7 @@ export async function runAllCollections(directoryName: string, namespace: string
     })
 }
 
-function runCollection(filePath: string, namespace: string) {
+export function runCollection(filePath: string, namespace: string) {
     newman.run({
         collection: require(path.join(__dirname, "../../", filePath)),
         reporters: 'cli'

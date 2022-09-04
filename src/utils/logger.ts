@@ -25,12 +25,10 @@ const error = (namespace: string, message: string, object?: any) => {
 };
 
 const debug = (namespace: string, message: string, object?: any) => {
-    if (!config.production) {
-        if (object) {
-            console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`, object);
-        } else {
-            console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`);
-        }
+    if (object) {
+        console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`, object);
+    } else {
+        console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`);
     }
 };
 

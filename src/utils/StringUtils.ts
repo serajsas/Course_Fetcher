@@ -50,9 +50,7 @@ export function formatStringToGetMajorPage(major: string) {
     let majors: Array<string> = major.split(" ").map(x => x.trim());
     majors = capitalizeFirstLetterAndLowerRest(majors);
     major = majors.join(" ")
-    if (major == "Cellular and Physiological Sciences" ||
-        major == "Earth and Ocean Sciences" ||
-        major == "Microbiology and Immunology") {
+    if (doesMajorContainOriginalAnd(major)) {
         return major;
     }
     majors = major.split("and").map(x => x.trim());
@@ -107,4 +105,13 @@ function extractMajorNameOnly(major: string): string {
 function equals(a: any, b: any) {
     return a.length === b.length &&
         a.every((v: any, i: any) => v === b[i]);
+}
+
+export function doesMajorContainOriginalAnd(major: string): boolean {
+    if (major == "Cellular and Physiological Sciences" ||
+        major == "Earth and Ocean Sciences" ||
+        major == "Microbiology and Immunology") {
+        return true;
+    }
+    return false;
 }

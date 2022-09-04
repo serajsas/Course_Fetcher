@@ -9,7 +9,10 @@ import {
 } from "../../utils/StringUtils";
 import {createMajorModels, MajorDoesNotExist, MajorModel, Requirement} from "../../models/major/MajorModel";
 import {MajorDAO} from "../../dao/major/MajorDAO";
+import logger from "../../utils/logger";
+import {Promise} from "mongoose";
 
+const NAMESPACE = "src/scrapers/major/MajorCalendarScraper.ts";
 const majorDoesNotExistFlag = "Requirements not found! Check other pages";
 const majorNotFoundFlag = "Requirements might exist on the other major's page, try to invert your majors";
 
@@ -21,8 +24,9 @@ export class MajorCalendarScraper {
     }
 
     async getMajorCalendar(major: string, specialization: string): Promise<Array<MajorModel>> {
+        logger.debug(NAMESPACE, "Starting major scrapping", {major, specialization});
         let majorLink: string = await this.getMajorTree(major);
-        const response = await axios.get(majorLink);
+        const response = await axios.get(majorLink, {proxy: false});
         const page = cheerio.load(response.data);
         page('sup').remove();
         page('.footnote').remove();
@@ -38,11 +42,12 @@ export class MajorCalendarScraper {
             requiredNames,
             majorCapitalized, specializationCapitalized
         );
-        return majorModels;
+        return Promise.resolve(majorModels);
     }
 
 
-    private fetchRequirementsFromPage(page: CheerioAPI, major: string, specialization: string | undefined) {
+    private fetchRequirementsFromPage(page: CheerioAPI, major: string, specialization: string | undefined):
+        { requiredNames: any; scrapedData: any } {
         let scrapedData: any = [];
         let requiredNames: any = page(`h4:contains("Major"), h4:contains("Honours"), h4:contains("Dual Degree"), h4:contains(${major}), h4:contains(${specialization})`)
             .toArray().map(e => {
@@ -92,13 +97,18 @@ export class MajorCalendarScraper {
                 major,
                 specialization);
         })
+
+        if (majorModels.length == 0) {
+            return Promise.reject(new MajorDoesNotExist());
+        }
+
         return majorModels;
     }
 
     private async getMajorTree(major: string): Promise<string> {
         let uriComponent = "index.cfm?tree=12,215,410,1457";
         const response =
-            await axios.get(`https://www.calendar.ubc.ca/vancouver/${uriComponent}`);
+            await axios.get(`https://www.calendar.ubc.ca/vancouver/${uriComponent}`, {proxy: false});
         const $ = cheerio.load(response.data);
         let majorString = formatStringToGetMajorPage(major);
         let tree: string | undefined = $(`a:contains(${majorString.split("and")[0]})`).attr("href");
@@ -106,8 +116,8 @@ export class MajorCalendarScraper {
             tree = "index.cfm?tree=12,215,410,1701";
         }
         if (tree == undefined) {
-            throw new MajorDoesNotExist();
+            return Promise.reject(new MajorDoesNotExist());
         }
-        return "https://www.calendar.ubc.ca/vancouver/" + tree;
+        return Promise.resolve("https://www.calendar.ubc.ca/vancouver/" + tree);
     }
 }

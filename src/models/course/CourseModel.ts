@@ -1,7 +1,7 @@
-export class PreReqsNotFoundInDB extends Error {
+export class CourseNotFoundInDB extends Error {
     constructor() {
-        super("PreReqsNotFoundInDB");
-        Error.captureStackTrace(this, PreReqsNotFoundInDB);
+        super("CourseNotFoundInDB");
+        Error.captureStackTrace(this, CourseNotFoundInDB);
     }
 }
 
@@ -18,5 +18,34 @@ export interface ICourse {
     courseDescription: string,
     courseDepartment: string,
     courseNumber: number,
-    preRequisites: string
+    preRequisites: string,
+    coRequisites: string,
+    campus: string
+}
+
+export function toController(data: ICourse) {
+    let course: ICourse = {
+        courseTitle: data.courseTitle,
+        courseDescription: data.courseDescription,
+        courseDepartment: data.courseDepartment,
+        courseNumber: data.courseNumber,
+        preRequisites: data.preRequisites,
+        coRequisites: data.coRequisites,
+        campus: data.campus
+    };
+    return course;
+}
+
+export function fromDAO(result: ICourse) {
+    let courseResult: ICourse = {
+        courseTitle: result.courseTitle,
+        courseDescription: result.courseDescription,
+        courseDepartment: result.courseDepartment,
+        courseNumber: result.courseNumber,
+        preRequisites: result.preRequisites,
+        coRequisites: result.coRequisites,
+        campus: result.campus,
+
+    }
+    return courseResult;
 }

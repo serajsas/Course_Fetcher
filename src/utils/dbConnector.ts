@@ -6,7 +6,8 @@ const url = `mongodb://mongodb_container:27017`;
 
 export function connect(): void {
     mongoose.connect(
-        url, {autoIndex:false}
+        url,
+        {autoIndex: false}
     ).then(function () {
         logger.debug(NAMESPACE, "DB Connection has been established!!");
     }).catch((err: any) => {

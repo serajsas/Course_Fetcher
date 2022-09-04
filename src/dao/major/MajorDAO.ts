@@ -57,10 +57,6 @@ export class MajorDAO {
                     specialization);
             });
             logger.debug(NAMESPACE, "Result of filter", result);
-            if (result.length == 0) {
-                logger.debug(NAMESPACE, "Major calendar does not exist in DB");
-                return Promise.reject(new MajorDoesNotExist());
-            }
             result = result.map((major) => {
                 let newMajor: MajorModel = {
                     majorTitle: major.majorTitle, requirements: major.requirements.map((requirement) => {
