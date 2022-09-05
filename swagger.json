@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "description": "An API that allows getting course and major (currently supporting Science majors only)"
   },
-  "host": "localhost:8000",
+  "host": "ubccourseandmajorapi.herokuapp.com",
   "basePath": "/api/v1/",
   "tags": [
     {
