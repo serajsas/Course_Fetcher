@@ -22,8 +22,8 @@ app.use('/api/v1/course', CourseRoutes);
 app.use('/api/v1/major', MajorRoutes);
 
 app.get("*", (req, res) => {
-    logger.debug(NAMESPACE, "Server received a request")
-    return res.status(404).send();
+    logger.debug(NAMESPACE, "Server received a request");
+    return res.redirect('/api/v1/docs');
 });
 
 connect();
