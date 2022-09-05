@@ -64,6 +64,9 @@
           },
           "404": {
             "description": "Resource not found"
+          },
+          "429": {
+            "description": "Too many requests"
           }
         }
       }
@@ -104,6 +107,9 @@
           },
           "404": {
             "description": "Resource not found"
+          },
+          "429": {
+            "description": "Too many requests"
           }
         }
       }
