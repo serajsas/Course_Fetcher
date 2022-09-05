@@ -18,12 +18,12 @@ export async function getCourseWithPreReqs(courseDepartment: string, courseNumbe
     }
 
     let description: string = $(`h4:contains(${courseDepartment})`).next().text();
-    description = description == "" ? "N/A" : description;
+    description = description.trim() == "" ? "N/A" : description;
     let preReqs: string = $('p:contains("Pre-reqs:")').text();
-    preReqs = preReqs == "" ? "N/A" : removeDuplicateTextFromPreReqsAndCoReqs(preReqs.replace(/\s+/g, ' ').trim());
+    preReqs = preReqs.trim() == "" ? "N/A" : removeDuplicateTextFromPreReqsAndCoReqs(preReqs.replace(/\s+/g, ' ').trim());
     let coReqs: string =
         $('p:contains("Co-reqs:")').text();
-    coReqs = coReqs == "" ? "N/A" : removeDuplicateTextFromPreReqsAndCoReqs(coReqs.replace(/\s+/g, ' ').trim());
+    coReqs = coReqs.trim() == "" ? "N/A" : removeDuplicateTextFromPreReqsAndCoReqs(coReqs.replace(/\s+/g, ' ').trim());
     let camp: string =
         $('button:contains("Campus:")').text().split(":").map((x: string) => x.trim())[1];
 
