@@ -33,7 +33,6 @@ export class CourseFetcher implements ICourseFetch {
             campus: ""
         };
         try {
-            // await this.courseSeederDAO.getSeededCourse(deptName.toUpperCase() + " " + courseNumber);
             course = await this.courseDAO.getCourse(courseNumber,
                 deptName,
                 campus);
