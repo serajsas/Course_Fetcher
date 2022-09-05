@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
     let course: ICourse;
     try {
         logger.debug(NAMESPACE, "Fetching course course");
-        course = await courseAPI.getCoursePreReqs(departmentName.toUpperCase(),
+        course = await courseAPI.getCourse(departmentName.toUpperCase(),
             parseInt(courseNumber), campus != undefined ? campus.toUpperCase() : "");
     } catch (e: any) {
         logger.error(NAMESPACE, "No course matching is found!", {departmentName, courseNumber});

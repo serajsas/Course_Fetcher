@@ -10,8 +10,8 @@ export class CourseFetch implements ICourseFetch {
         this.courseController = new CourseFetcher();
     }
 
-    async getCoursePreReqs(deptName: string, courseNumber: number, campus: string): Promise<ICourse> {
-        return await this.courseController.getCoursePreReqs(deptName,
+    async getCourse(deptName: string, courseNumber: number, campus: string): Promise<ICourse> {
+        return await this.courseController.getCourse(deptName,
             courseNumber,
             campus);
     }

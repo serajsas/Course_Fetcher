@@ -1,8 +1,9 @@
 import mongoose, {model} from "mongoose";
-import {fromDAO, ICourse, CourseNotFoundInDB} from "../../models/course/CourseModel";
+import {fromDAOICourse, ICourse, CourseNotFoundInDB} from "../../models/course/CourseModel";
 import logger from "../../utils/logger";
 import {data} from "cheerio/lib/api/attributes";
 import {connect} from "../../utils/dbConnector";
+import {initiateDBSSeeding} from "../../../seed/Seeder";
 
 const NAMESPACE = "src/dao/course/CourseDAO.ts";
 
@@ -128,7 +129,7 @@ export class CourseDAO {
             return Promise.reject(new CourseNotFoundInDB());
         }
 
-        let courseResult = fromDAO(result[0]);
+        let courseResult = fromDAOICourse(result[0]);
         return Promise.resolve(courseResult);
     }
 }

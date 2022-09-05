@@ -5,6 +5,13 @@ export class CourseNotFoundInDB extends Error {
     }
 }
 
+export class SeededCourseNotFoundInDB extends Error {
+    constructor() {
+        super("SeededCourseNotFoundInDB");
+        Error.captureStackTrace(this, SeededCourseNotFoundInDB);
+    }
+}
+
 export class CourseDoesNotExist extends Error {
     constructor() {
         super("Invalid course, course might not be offered for this session, " +
@@ -36,7 +43,7 @@ export function toController(data: ICourse) {
     return course;
 }
 
-export function fromDAO(result: ICourse) {
+export function fromDAOICourse(result: ICourse) {
     let courseResult: ICourse = {
         courseTitle: result.courseTitle,
         courseDescription: result.courseDescription,

@@ -3,14 +3,13 @@ import axios from "axios";
 import {CourseDoesNotExist, ICourse} from "../../models/course/CourseModel";
 import logger from "../../utils/logger";
 
-const NAMESPACE = "src/scrapers/course/CoursePreReqsScraper.ts";
+const NAMESPACE = "src/scrapers/course/CourseScraper.ts";
 
 export async function getCourseWithPreReqs(courseDepartment: string, courseNumber: number, campus?: string): Promise<ICourse> {
     logger.debug(NAMESPACE, "Starting course scrapping", {courseDepartment, courseNumber, campus});
     let campusURI = campus != undefined && campus.toLowerCase().includes("okanagan") ? "&campuscd=UBCO" : "";
     const response =
-        await axios.get(`https://www.courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=${courseDepartment}&course=${courseNumber}` + campusURI,
-            {proxy: false});
+        await axios.get(`https://www.courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=${courseDepartment}&course=${courseNumber}` + campusURI);
     const $ = cheerio.load(response.data);
     let title: string =
         $(`h4:contains(${courseDepartment})`).text().split(" ").map((x: string) => x.trim()).join(" ");
@@ -19,6 +18,7 @@ export async function getCourseWithPreReqs(courseDepartment: string, courseNumbe
     }
 
     let description: string = $(`h4:contains(${courseDepartment})`).next().text();
+    description = description == "" ? "N/A" : description;
     let preReqs: string = $('p:contains("Pre-reqs:")').text();
     preReqs = preReqs == "" ? "N/A" : removeDuplicateTextFromPreReqsAndCoReqs(preReqs.replace(/\s+/g, ' ').trim());
     let coReqs: string =

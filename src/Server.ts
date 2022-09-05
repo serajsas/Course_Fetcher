@@ -7,6 +7,7 @@ import swaggerDocs from '../swagger.json';
 import swaggerUI from 'swagger-ui-express';
 import {connect} from "./utils/dbConnector";
 import MajorRoutes from './routes/MajorRoutes';
+import {initiateDBSSeeding} from "../seed/Seeder";
 
 const NAMESPACE = "src/Server.ts";
 
@@ -30,4 +31,7 @@ connect();
 
 app.listen(config.server.port, () => {
     logger.debug(NAMESPACE, `Server is running ${config.server.hostname}:${config.server.port}`)
+    // initiateDBSSeeding().then(()=>{
+    //     logger.debug(NAMESPACE, "DB is fully seeded now!!")
+    // })
 })
