@@ -27,13 +27,14 @@ export class MajorDAO {
 
     /**
      * This method inserts a major model and returns a majorTitle string
-     * @param requirement
+     * @param toInsert
      */
     async insertMajorModel(toInsert: MajorModel): Promise<MajorModel> {
         let major = new Major(toInsert);
         try {
-            await major.save(() => {
+            await major.save(async () => {
                 logger.debug(NAMESPACE, "Major saved!");
+                await mongoose.connection.close();
             });
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
@@ -51,6 +52,7 @@ export class MajorDAO {
         try {
             logger.debug(NAMESPACE, "Getting majors calendar");
             result = await Major.find({query}).exec();
+            await mongoose.connection.close();
             result = result.filter(s => {
                 return isTwoStringsContainTheSameWords(s.majorTitle,
                     majorName,
@@ -67,6 +69,7 @@ export class MajorDAO {
             });
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
+            await mongoose.connection.close();
             return Promise.reject(e);
         }
         return Promise.resolve(result);
