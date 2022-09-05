@@ -26,6 +26,25 @@ export interface CourseSeedModel {
 
 const CourseSeed = model<CourseSeedModel>('course_seed', CourseSeedSchema);
 
+function getNotSeededSubjectCodes(subjectCodes: Array<string>, lastSubjectCode: string) {
+    let lastOne = -1;
+    for (let i = 0; i < subjectCodes.length; i++) {
+        if (subjectCodes[i] == lastSubjectCode) {
+            lastOne = i;
+        }
+    }
+    if (lastOne == -1) {
+        return subjectCodes;
+    }
+    let notInsertedSubjectCodes = [];
+    for (let i = 0; i < subjectCodes.length; i++) {
+        if (i > lastOne) {
+            notInsertedSubjectCodes.push(subjectCodes[i]);
+        }
+    }
+    return notInsertedSubjectCodes;
+}
+
 export class CourseSeedDAO {
     constructor() {
         CourseSeed.createIndexes().then(() => {
@@ -41,7 +60,7 @@ export class CourseSeedDAO {
             url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&campuscd=UBC";
         }
         let subjectCodes = await getAllSubjectCodes(url);
-
+        subjectCodes = getNotSeededSubjectCodes(subjectCodes, 'SCAN');
         for (const code of subjectCodes) {
             let courses;
             try {
@@ -57,6 +76,7 @@ export class CourseSeedDAO {
             await sleep(10000);
         }
     }
+
 
     async getSeededCourse(name: string) {
         let result: Array<CourseSeedModel>;
@@ -97,4 +117,5 @@ export class CourseSeedDAO {
         let count = await CourseSeed.count({$or: [{campus: "UBC Vancouver"}, {campus: "UBC Okanagan"}]});
         return count;
     }
+
 }
