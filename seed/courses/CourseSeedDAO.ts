@@ -60,7 +60,7 @@ export class CourseSeedDAO {
             url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&campuscd=UBC";
         }
         let subjectCodes = await getAllSubjectCodes(url);
-        subjectCodes = getNotSeededSubjectCodes(subjectCodes, 'SCAN');
+        // subjectCodes = getNotSeededSubjectCodes(subjectCodes, 'SCAN');
         for (const code of subjectCodes) {
             let courses;
             try {
