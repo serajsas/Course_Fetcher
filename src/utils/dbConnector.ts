@@ -7,7 +7,7 @@ let url = `mongodb://mongodb_container:27017/ubcapi`;
 
 export function connect(): void {
     if(config.env == "PRODUCTION"){
-        url = `mongodb+srv://${process.env.USERNAME}:${process.env.DB_PASSWORD}@cluster0.sndj1.mongodb.net/ubcapi/?retryWrites=true&w=majority`;
+        url = `mongodb+srv://${process.env.USERNAME}:${process.env.DB_PASSWORD}@cluster0.sndj1.mongodb.net/ubcapi`;
     }
     mongoose.connect(
         url,
