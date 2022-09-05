@@ -4,8 +4,9 @@ import logger from "../../utils/logger";
 import {MajorDAO} from "../../dao/major/MajorDAO";
 import {MajorCalendarScraper} from "../../scrapers/major/MajorCalendarScraper";
 import {is} from "cheerio/lib/api/traversing";
-import {doesMajorContainOriginalAnd} from "../../utils/StringUtils";
+import {doesMajorContainOriginalAnd, formatStringToGetMajorPage, getReversedMajorName} from "../../utils/StringUtils";
 import {Promise} from "mongoose";
+import {majorsName} from "../../scrapers/major/SeedMajorsScraper";
 
 const NAMESPACE = "src/controller/major/MajorFetcher.ts";
 
@@ -19,6 +20,12 @@ export class MajorFetcher implements IMajorFetch {
     }
 
     async getMajorRequirements(majorName: string, specialization: string): Promise<Array<MajorModel>> {
+        let major = formatStringToGetMajorPage(majorName);
+        let reversedMajor = formatStringToGetMajorPage(getReversedMajorName(majorName));
+        if (!majorsName.includes(major) || !majorsName.includes(reversedMajor)) {
+            logger.debug(NAMESPACE, "MajorsName does not include majorString", {major, reversedMajor});
+            return Promise.reject(new MajorDoesNotExist());
+        }
         let majors: Array<string> = majorName.split("and");
         let resultOne: Array<MajorModel> = [];
         let resultTwo: Array<MajorModel> = [];

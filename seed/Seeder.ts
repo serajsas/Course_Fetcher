@@ -1,0 +1,15 @@
+import {CourseSeedDAO} from "./courses/CourseSeedDAO";
+import {sleep} from "../src/utils/dbConnector";
+
+export async function initiateDBSSeeding() {
+    let coursesSeeder = new CourseSeedDAO();
+    // let isCoursesDBSeeded = await coursesSeeder.isCoursesDBSeeded();
+    // ADD GUARD AFTER YOU GET ALL THE COURSES FROM UBC
+    await initiateDBSeedingForCourses(coursesSeeder);
+}
+
+async function initiateDBSeedingForCourses(courseSeeder: CourseSeedDAO) {
+    await courseSeeder.seedDBWithCourses("UBC Vancouver");
+    await sleep(86400000);
+    await courseSeeder.seedDBWithCourses("UBC Okanagan");
+}

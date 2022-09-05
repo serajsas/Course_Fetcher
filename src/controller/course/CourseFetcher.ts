@@ -1,19 +1,28 @@
 import {ICourseFetch} from "../../api/courseAPI/ICourseFetch";
 import {CourseDAO} from "../../dao/course/CourseDAO";
 import logger from "../../utils/logger";
-import {getCourseWithPreReqs} from "../../scrapers/course/CoursePreReqsScraper";
-import {CourseDoesNotExist, ICourse, CourseNotFoundInDB, toController} from "../../models/course/CourseModel";
+import {getCourseWithPreReqs} from "../../scrapers/course/CourseScraper";
+import {
+    CourseDoesNotExist,
+    ICourse,
+    CourseNotFoundInDB,
+    toController,
+    SeededCourseNotFoundInDB
+} from "../../models/course/CourseModel";
+import {CourseSeedDAO} from "../../../seed/courses/CourseSeedDAO";
 
 const NAMESPACE = "src/controller/Course/CourseFetcher.ts";
 
 export class CourseFetcher implements ICourseFetch {
     private courseDAO: CourseDAO;
+    private courseSeederDAO: CourseSeedDAO;
 
     constructor() {
         this.courseDAO = new CourseDAO();
+        this.courseSeederDAO = new CourseSeedDAO();
     }
 
-    async getCoursePreReqs(deptName: string, courseNumber: number, campus: string): Promise<ICourse> {
+    async getCourse(deptName: string, courseNumber: number, campus: string): Promise<ICourse> {
         let course: ICourse = {
             courseTitle: "",
             courseDescription: "",
@@ -24,11 +33,15 @@ export class CourseFetcher implements ICourseFetch {
             campus: ""
         };
         try {
+            // await this.courseSeederDAO.getSeededCourse(deptName.toUpperCase() + " " + courseNumber);
             course = await this.courseDAO.getCourse(courseNumber,
                 deptName,
                 campus);
         } catch (e: any) {
-            if (e instanceof CourseNotFoundInDB) {
+            if (e instanceof SeededCourseNotFoundInDB) {
+                logger.debug(NAMESPACE, "SeededCourseNotFoundInDB", e);
+                return Promise.reject(new SeededCourseNotFoundInDB());
+            } else if (e instanceof CourseNotFoundInDB) {
                 logger.debug(NAMESPACE, e.message);
                 let data: ICourse;
                 try {
