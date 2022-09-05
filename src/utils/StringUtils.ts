@@ -115,3 +115,13 @@ export function doesMajorContainOriginalAnd(major: string): boolean {
     }
     return false;
 }
+
+export function getReversedMajorName(majorName: string): string {
+    let arr: Array<string> = majorName.split(" and ").reverse();
+    console.log(arr);
+    let reversedString = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+        reversedString = reversedString + " and " + arr[i];
+    }
+    return reversedString;
+}

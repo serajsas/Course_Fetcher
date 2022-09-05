@@ -41,12 +41,15 @@ export class MajorFetcher implements IMajorFetch {
                     resultOne = await this.majorCalendarScraper.getMajorCalendar(majorName, specialization);
                 }
             } else {
-                resultOne = await this.majorCalendarScraper.getMajorCalendar(majorName, specialization);
+                resultOne = await this.majorDAO.getMajorModel(majorName, specialization);
+                if (resultOne.length == 0) {
+                    resultOne = await this.majorCalendarScraper.getMajorCalendar(majorName, specialization);
+                }
+                return Promise.resolve(resultOne);
             }
         } catch (e: any) {
             return Promise.reject(new MajorDoesNotExist());
         }
-
         return Promise.resolve(resultOne);
     }
 }
