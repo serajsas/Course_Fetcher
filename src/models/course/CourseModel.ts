@@ -7,7 +7,7 @@ export class CourseNotFoundInDB extends Error {
 
 export class SeededCourseNotFoundInDB extends Error {
     constructor() {
-        super("SeededCourseNotFoundInDB");
+        super("Course Not Found, Please check course code and number");
         Error.captureStackTrace(this, SeededCourseNotFoundInDB);
     }
 }

@@ -6,28 +6,7 @@ const NAMESPACE = "seed/courses/SeedCoursesScraper.ts";
 
 const basePath = "https://courses.students.ubc.ca";
 
-export async function getCourses(campus: string): Promise<Array<Array<string>>> {
-    logger.debug(NAMESPACE, "Starting seeding process for", campus);
-    let url: string = "";
-    if (campus.toLowerCase().includes("okanagan")) {
-        url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&campuscd=UBCO";
-    } else {
-        url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&campuscd=UBC";
-    }
-    let allCourses: Array<Array<string>> = [];
-    let subjectCodes = await getAllSubjectCodes(url);
-    for (const code of subjectCodes) {
-        let courses = await getSubjectCodeCourses(code, url);
-        if (courses != undefined) {
-            allCourses.push(courses);
-        }
-        logger.debug(NAMESPACE, "Before Sleep", allCourses);
-        await sleep(1000);
-    }
-    return Promise.resolve(allCourses);
-}
-
-async function getAllSubjectCodes(url: string): Promise<Array<string>> {
+export async function getAllSubjectCodes(url: string): Promise<Array<string>> {
     logger.debug(NAMESPACE, "getAllSubjectCodes", url);
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
@@ -38,7 +17,7 @@ async function getAllSubjectCodes(url: string): Promise<Array<string>> {
     return Promise.resolve(subjectCodes);
 }
 
-async function getSubjectCodeCourses(subjectCode: string, url: string): Promise<Array<string>> {
+export async function getSubjectCodeCourses(subjectCode: string, url: string): Promise<Array<string>> {
     logger.debug(NAMESPACE, "getSubjectCodeCourses", {subjectCode, url});
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
@@ -57,6 +36,3 @@ async function getSubjectCodeCourses(subjectCode: string, url: string): Promise<
     return Promise.resolve(courses);
 }
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}

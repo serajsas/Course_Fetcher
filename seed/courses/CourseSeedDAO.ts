@@ -1,7 +1,8 @@
 import mongoose, {model} from "mongoose";
-import {getCourses} from "../../src/scrapers/course/SeedCoursesScraper";
+import {getAllSubjectCodes, getSubjectCodeCourses} from "../../src/scrapers/course/SeedCoursesScraper";
 import logger from "../../src/utils/logger";
 import {SeededCourseNotFoundInDB} from "../../src/models/course/CourseModel";
+import {sleep} from "../../src/utils/dbConnector";
 
 const NAMESPACE = "seed/courses/CourseSeedDAO.ts";
 const CourseSeedSchema = new mongoose.Schema(
@@ -18,32 +19,52 @@ const CourseSeedSchema = new mongoose.Schema(
     }
 );
 
-export interface courseSeedModel {
+export interface CourseSeedModel {
     courseTitle: string,
     campus: string
 }
 
-const CourseSeed = model<courseSeedModel>('course_seed', CourseSeedSchema);
+const CourseSeed = model<CourseSeedModel>('course_seed', CourseSeedSchema);
 
 export class CourseSeedDAO {
-    async seedDBWithCourses(campus: string) {
-        getCourses(campus).then(async (allArraysOfCourses) => {
-            for (let i = 0; i < allArraysOfCourses.length; i++) {
-                const arrayOfCourses = allArraysOfCourses[i];
-                for (let j = 0; j < arrayOfCourses.length; j++) {
-                    const course = arrayOfCourses[j];
-                    logger.debug(NAMESPACE, "Inserting seeded course into DB", {course, campus});
-                    await this.insertSeededCourse(course.trim(), campus);
-                }
-            }
+    constructor() {
+        CourseSeed.createIndexes().then(() => {
+            logger.debug(NAMESPACE, "INDEXES INITIALIZED!!");
         });
     }
 
-    async getSeededCourse(name: string, campus: string) {
-        let result: Array<courseSeedModel>;
+    async seedDBWithCourses(campus: string) {
+        let url: string = "";
+        if (campus.toLowerCase().includes("okanagan")) {
+            url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&campuscd=UBCO";
+        } else {
+            url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&campuscd=UBC";
+        }
+        let subjectCodes = await getAllSubjectCodes(url);
+
+        for (const code of subjectCodes) {
+            let courses;
+            try {
+                courses = await getSubjectCodeCourses(code, url);
+                for (const course of courses) {
+                    logger.debug(NAMESPACE, "Inserting course in DB", course);
+                    await this.insertSeededCourse(course.trim(), campus);
+                }
+            } catch (e) {
+
+            }
+            logger.debug(NAMESPACE, "Before Sleep", courses);
+            await sleep(10000);
+        }
+    }
+
+    async getSeededCourse(name: string) {
+        let result: Array<CourseSeedModel>;
         try {
-            logger.debug(NAMESPACE, "Getting a seeded course", {name, campus});
-            result = await CourseSeed.find({name, campus}).exec();
+            logger.debug(NAMESPACE, "Getting a seeded course", {name});
+            result = await CourseSeed.find({courseTitle: name}).exec();
+            logger.debug(NAMESPACE, "Result of finding seeded course", result);
+
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
             return Promise.reject(e);
@@ -52,7 +73,7 @@ export class CourseSeedDAO {
             return Promise.reject(new SeededCourseNotFoundInDB());
         }
 
-        let courseResult: courseSeedModel = {courseTitle: result[0].courseTitle, campus: result[0].campus};
+        let courseResult: CourseSeedModel = {courseTitle: result[0].courseTitle, campus: result[0].campus};
         return Promise.resolve(courseResult);
     }
 
@@ -72,8 +93,8 @@ export class CourseSeedDAO {
         return Promise.resolve(seededCourse);
     }
 
-    async isCoursesDBSeeded(): Promise<boolean> {
-        let count = await CourseSeed.count({campus: "UBC Vancouver" || "UBC Okanagan"});
-        return count != 0;
+    async isCoursesDBSeeded(): Promise<number> {
+        let count = await CourseSeed.count({$or: [{campus: "UBC Vancouver"}, {campus: "UBC Okanagan"}]});
+        return count;
     }
 }

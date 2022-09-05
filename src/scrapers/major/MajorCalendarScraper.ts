@@ -11,6 +11,7 @@ import {createMajorModels, MajorDoesNotExist, MajorModel, Requirement} from "../
 import {MajorDAO} from "../../dao/major/MajorDAO";
 import logger from "../../utils/logger";
 import {Promise} from "mongoose";
+import {majorsName} from "./SeedMajorsScraper";
 
 const NAMESPACE = "src/scrapers/major/MajorCalendarScraper.ts";
 const majorDoesNotExistFlag = "Requirements not found! Check other pages";
@@ -111,12 +112,13 @@ export class MajorCalendarScraper {
             await axios.get(`https://www.calendar.ubc.ca/vancouver/${uriComponent}`);
         const $ = cheerio.load(response.data);
         let majorString = formatStringToGetMajorPage(major);
+        if (!majorsName.includes(majorString)) {
+            logger.debug(NAMESPACE, "MajorsName does not include majorString", majorString);
+            return Promise.reject(new MajorDoesNotExist());
+        }
         let tree: string | undefined = $(`a:contains(${majorString.split("and")[0]})`).attr("href");
         if (majorString == "Neuroscience") {
             tree = "index.cfm?tree=12,215,410,1701";
-        }
-        if (tree == undefined) {
-            return Promise.reject(new MajorDoesNotExist());
         }
         return Promise.resolve("https://www.calendar.ubc.ca/vancouver/" + tree);
     }
