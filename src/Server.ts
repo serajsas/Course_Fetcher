@@ -8,10 +8,22 @@ import swaggerUI from 'swagger-ui-express';
 import {connect} from "./utils/dbConnector";
 import MajorRoutes from './routes/MajorRoutes';
 import {initiateDBSSeeding} from "../seed/Seeder";
+import rateLimit from 'express-rate-limit'
 
 const NAMESPACE = "src/Server.ts";
 
 const app = express();
+
+const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 15 minutes
+    max: 50, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    standardHeaders: false, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers,
+    message:"We have noticed unusual activity coming from this IP Address."
+})
+
+// Apply the rate limiting middleware to all requests
+app.use(limiter)
 
 app.use('/api/v1/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
