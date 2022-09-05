@@ -9,17 +9,14 @@ import {
     toController,
     SeededCourseNotFoundInDB
 } from "../../models/course/CourseModel";
-import {CourseSeedDAO} from "../../../seed/courses/CourseSeedDAO";
 
 const NAMESPACE = "src/controller/Course/CourseFetcher.ts";
 
 export class CourseFetcher implements ICourseFetch {
     private courseDAO: CourseDAO;
-    private courseSeederDAO: CourseSeedDAO;
 
     constructor() {
         this.courseDAO = new CourseDAO();
-        this.courseSeederDAO = new CourseSeedDAO();
     }
 
     async getCourse(deptName: string, courseNumber: number, campus: string): Promise<ICourse> {
