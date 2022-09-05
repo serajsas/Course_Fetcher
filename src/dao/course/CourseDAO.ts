@@ -78,14 +78,12 @@ export class CourseDAO {
         });
         try {
             await course.save(async () => {
-                await mongoose.connection.close();
                 logger.debug(NAMESPACE, "Course saved!");
             });
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
             return Promise.reject(e);
         }
-
         return Promise.resolve(course);
     };
 
@@ -98,14 +96,11 @@ export class CourseDAO {
                        courseDepartment: string): Promise<void> {
         try {
             logger.debug(NAMESPACE, "Deleting a course with all its preReqs");
-            await Course.deleteMany({courseDepartment, courseNumber}).exec(async ()=>{
-                await mongoose.connection.close();
-            });
+            await Course.deleteMany({courseDepartment, courseNumber}).exec();
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
             return Promise.reject(e);
         }
-        await mongoose.connection.close();
         return Promise.resolve();
     };
 
@@ -125,13 +120,10 @@ export class CourseDAO {
         try {
             logger.debug(NAMESPACE, "Getting a course", {courseDepartment, courseNumber, campus});
             result = await Course.find({courseDepartment, courseNumber, campus}).exec();
-            await mongoose.connection.close();
         } catch (e: any) {
             logger.error(NAMESPACE, e.message);
-            await mongoose.connection.close();
             return Promise.reject(e);
         }
-
         if (result.length == 0) {
             return Promise.reject(new CourseNotFoundInDB());
         }
