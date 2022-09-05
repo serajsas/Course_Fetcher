@@ -1,7 +1,7 @@
 import mongoose, {model} from "mongoose";
 import {MajorDoesNotExist, MajorModel} from "../../models/major/MajorModel";
 import logger from "../../utils/logger";
-import {isTwoStringsContainTheSameWords} from "../../utils/StringUtils";
+import {getReversedMajorName, isTwoStringsContainTheSameWords} from "../../utils/StringUtils";
 
 const NAMESPACE = "src/dao/major/MajorDAO.ts";
 
@@ -46,7 +46,7 @@ export class MajorDAO {
         let result: Array<MajorModel>;
         let query = {
             $or: [{majorTitle: {$regex: `${majorName}`}},
-                {majorTitle: {$regex: `${majorName.split(" ").reverse().join(" ")}`}}]
+                {majorTitle: {$regex: `${getReversedMajorName(majorName)}`}}]
         };
         try {
             logger.debug(NAMESPACE, "Getting majors calendar");
