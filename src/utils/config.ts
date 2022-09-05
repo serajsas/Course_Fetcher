@@ -12,7 +12,7 @@ const MONGOOSE = {
 };
 
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME;
-const SERVER_PORT = process.env.SERVER_PORT;
+const SERVER_PORT = process.env.SERVER_PORT || 8000;
 
 const SERVER = {
     hostname: SERVER_HOSTNAME,
